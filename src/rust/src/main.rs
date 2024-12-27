@@ -23,6 +23,7 @@ fn main() -> io::Result<()> {
     ("ITE QUICK SORT", iterative_quick_sort),
     ("REC MERGE SORT", recursive_merge_sort),
     ("ITE MERGE SORT", iterative_merge_sort),
+    // ("HEAP SORT", heap_sort),
   ]);
 
   fs::create_dir_all("out")?;
@@ -36,6 +37,7 @@ fn main() -> io::Result<()> {
     "ITE - stands for iterative\nREC - stands for recursive\n"
   )?;
 
+  // Alter 10 power here
   for n in 1..=4 {
     writeln!(entries_file, "List with {} entries:\n", TEN.pow(n))?;
     run_entry(
