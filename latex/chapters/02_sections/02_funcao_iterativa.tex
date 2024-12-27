@@ -1,0 +1,126 @@
+\section{Função iterativa}
+\label{sec:func-it}
+
+Ainda na proposta de comparar dois algoritmos que tem a mesma finalidade, o caso em questão diz respeito à duas funções que verificam se o menor elemento de uma lista se repete. Ambas são testadas em listas de tamanho igual a 100, 1000 e 10000, sendo submetidas a cinco testes em cada uma. E a única restrição de entrada é que os elementos dessa lista sejam números entre 1 e 100. Para isso, foram implementados em C++ dois algoritmos que realizam o procedimento descrito. Sendo assim, façamos a análise das diferentes implementações do mesmo algoritmo do ponto de vista do pior, melhor e caso médio.
+
+\subsection{Algoritmo idadeRep}
+
+O algoritmo \textbf{idadeRep} foi implementado da seguinte forma
+
+\begin{lstlisting}[language=C++]
+bool idadeRep(vector<int> &idade) {
+  int tam = idade.size();
+  int indexMenor = 0;
+  for (int i = 1; i < tam; i++) {
+    if (idade[i] < idade[indexMenor]) {
+      indexMenor = i;
+    }
+  }
+  for (int i = 0; i < tam; i++) {
+    if (idade[i] == idade[indexMenor] && i != indexMenor) {
+      return true;
+    }
+  }
+  return false;
+}
+\end{lstlisting}
+\FloatBarrier
+
+\subsection{Análise do idadeRep}
+
+Note que o primeiro loop é inevitável independente do quão favorável seja a caso, e percorrerá a lista por inteira. Apenas no segundo loop que operações podem ser evitadas a depender da lista, pois o retorno de um valor encerra o programa. Além disso, perceba que a implementação acima pode ser visualizada da seguinte forma
+
+\begin{align*}
+  T(n) & = n + n\\ 
+       & = 2n \\
+       & = O(n)
+\end{align*}
+
+Em suma teremos o seguinte
+
+\begin{itemize}
+	\item \textbf{Pior caso:} Sendo o primeiro loop inevitável independente do cenário da lista, o pior caso seria quando o menor elemento só aparece uma vez na lista, portanto seria necessário percorrer a lista por inteira para identificar que ele não se repete.
+
+	\item \textbf{Melhor caso:} Seria quando o menor elemento aparece na primeira e na segunda posição da lista, pois é o caso em que a função retorna na primeira comparação feita.
+\end{itemize}
+
+Sendo assim, temos que $O(n)$, $\Omega(n)$ e $\Theta(n)$.
+
+\subsection{Resultados do idadeRep}
+
+O algoritmo \textbf{idadeRep} teve a seguinte performace nos testes
+
+\begin{table}[h!]
+	\centering
+	\caption{Tabela de resultados de idadeRep}
+	\label{tab:idade_rep_result}
+	\begin{tabular}{lrrrr}
+		\toprule
+		Lista   & n = 100   & n = 1000  & n = 10000 \\
+		\midrule
+		L1      & 431 ps    & 611 ps    & 3.837 ns  \\
+		L2      & 200 ps    & 521 ps    & 3.236 ns  \\
+		L3      & 251 ps    & 500 ps    & 3.186 ns  \\
+		L4      & 160 ps    & 491 ps    & 3.086 ns  \\
+		L5      & 130 ps    & 531 ps    & 3.346 ns  \\
+		\midrule
+		Médias  & 234.4 ps  & 530.8 ps  & 3.3382 ns \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+\FloatBarrier
+
+\subsection{Algoritmo idadeRep2}
+
+Já o algoritmo \textbf{idadeRep2} foi implementado da seguinte maneira 
+
+\begin{lstlisting}[language=C++]
+bool idadeRep2(vector<int> &idade) {
+  sort(idade.begin(), idade.end());
+  return idade[0] == idade[1];
+}
+\end{lstlisting}
+\FloatBarrier
+
+\subsection{Análise do idadeRep2}
+
+É possível reparar que a função é relativamente mais enxuta em relação à \textbf{idadeRep2}, isso pois sua estratégia para o mesmo fim é diferente. A \textbf{idadeRep2} usa uma abordagem que, em um primeiro momento, ordena a lista, e, com ela ordenada, verifica se os dois primeiros elementos são iguais. E de fato, se o objetivo é verificar se o menor elemento da lista se repete, esta se mostra resolutiva para o problema. \\
+Agora note que, em termos de complexidade, o algoritmo se apoia totalmente na função \href{https://en.cppreference.com/w/cpp/algorithm/sort}{sort} da biblioteca std do C++. Também vale a pena falar sobre a implementação da \textbf{sort}, que é uma mistura entre Quicksort, \href{https://en.wikipedia.org/wiki/Heapsort}{Heapsort} e \href{https://en.wikipedia.org/wiki/Insertion_sort}{Insertion Sort}. Portanto, sabemos que a complexidade da \textbf{idadeRep2} é igual a da \textbf{sort}, que é $O(n*\log_2{n})$ para todos os casos.
+
+\subsection{Resultados do idadeRep2}
+
+Os seguinte resultados foram obtidos
+
+\begin{table}[h!]
+	\centering
+	\caption{Tabela de resultados de idadeRep2}
+	\label{tab:idade_rep2_result}
+	\begin{tabular}{lrrrr}
+		\toprule
+		Lista   & n = 100   & n = 1000  & n = 10000 \\
+		\midrule
+		L1      & 2.334 ns    & 25.969 ns    & 240.219 ns  \\
+		L2      & 2.254 ns    & 24.425 ns    & 227.425 ns  \\
+		L3      & 2.174 ns    & 24.317 ns    & 233.317 ns  \\
+		L4      & 2.004 ns    & 23.414 ns    & 280.825 ns  \\
+		L5      & 2.084 ns    & 23.243 ns    & 257.501 ns  \\
+		\midrule
+		Médias  & 2.17 ns  & 24.4098 ns  &  247.857 ns \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+\FloatBarrier
+
+\subsection{Comparação dos algoritmos}
+
+É possível perceber que o \textbf{idadeRep} performa muito melhor em todos os testes. De forma mais específica
+
+\begin{itemize}
+  \item \textbf{n = 100:} A média de \textbf{idadeRep} é de 234.4 ps, enquanto a de \textbf{idadeRep2} é de 2334 ps, ou seja, praticamente 10x mais devagar.
+
+  \item \textbf{n = 10000:} Já nesse, caso \textbf{idadeRep} apresenta média de 530.8 ps, enquanto \textbf{idadeRep2} apresenta 24409.8 ps, tendo uma diferença de aproximadamente 46x.
+
+  \item \textbf{n = 100000:} Por fim, \textbf{idadeRep} tem 3.3382 ns de média. Já \textbf{idadeRep2}, 247.857 ns, uma diferença de quase 75x.
+\end{itemize}
+
+Portanto, ao colocar os resultados dos algoritmos lado a lado fica evidente que a implementação de \textbf{idadeRep} se sobressai.

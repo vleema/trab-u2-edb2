@@ -1,0 +1,144 @@
+\section{Função Recursiva}
+\label{sec:func-rec}
+
+Novamente, iremos comparar dois algoritmos que tem a mesmo objetivo, nesse caso, as duas funções buscam um elemento X em uma lista. Ambas são testadas em listas de tamanho igual a 100, 1000 e 10000, sendo submetidas a cinco testes em cada uma. Para isso, foram implementados em C++ dois algoritmos que realizam o procedimento descrito. Sendo assim, façamos a análise das diferentes implementações do mesmo algoritmo do ponto de vista do pior, melhor e caso médio.
+
+\subsection{Algoritmo buscaBinaria}
+
+O algoritmo \textbf{buscaBinaria} foi implementado da seguinte forma
+
+\begin{lstlisting}[language=C++]
+int buscaBinaria(vector<int> &lista, int tamanho, int x) {
+    int esq = 0; 
+    int dir = tamanho - 1;
+
+    while (esq < dir) {
+        int m = (esq + dir) / 2; 
+        if (x > lista[m]) {
+            esq = m + 1;
+        } else {
+            dir = m;
+        }
+    }
+
+    if (lista[esq] == x) {
+        return esq; 
+    }
+
+    return -1;
+}
+\end{lstlisting}
+
+\subsection{Análise do buscaBinaria}
+
+Note que o loop tem a condição de parada (esq < dir), o que significa que ele só irá terminar quando sobrar somente um valor possível na lista. Portanto, independente do quão favorável seja o caso, ele não irá verificar se lista[m] é o valor que está tentando encontrar, assim executado o loop aproximadamente $\log_ 2(\text{tamanho})$ vezes em todos os casos. Perceba que o algoritmo necessita de melhorias para funcionar de forma que a posição do número buscado seja influente na complexidade do código. Portanto, o loop se comportará da seguinte maneira:
+
+\begin{align*}
+        n/2^k = 1 
+       \Longrightarrow n = 2^k
+       \Longrightarrow k = \log_2 n
+\end{align*}
+
+Em suma teremos o seguinte
+
+\begin{itemize}
+  \item \textbf{Casos:} Dado que o loop inevitávelmente rodará $\log_2 ({tamanho})$ vezes independente do cenário da lista, todos os casos terão a mesma complexidade.
+ 
+\end{itemize}
+
+\subsection{Resultados do buscaBinaria}
+
+Portanto, o algoritmo \textbf{buscaBinaria} teve a seguinte performace nos testes
+
+\begin{table}[h!]
+	\centering
+	\caption{Tabela de resultados de buscaBinaria}
+	\label{tab:busc_bin_result}
+	\begin{tabular}{lrrrr}
+		\toprule
+		Lista   & n = 100   & n = 1000  & n = 10000 \\
+		\midrule
+		L1      & 190 ps    & 51 ps    & 141 ps  \\
+		L2      & 80 ps    & 70 ps    & 110 ps  \\
+		L3      & 80 ps    & 70 ps    & 101 ps  \\
+		L4      & 50 ps    & 80 ps    & 100 ps  \\
+		L5      & 50 ps    & 60 ps    & 100 ps  \\
+		\midrule
+		Médias  & 90 ps  & 66.2 ps  & 110.4 ps \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+É perceptivel que a Lista 1 com 100 números foi um outlier em nossa tabela, alterando o valor da média drasticamente tornando-a atípica. Entretanto podemos ver como nos outros casos o tempo é crescente levando em conta o tamanho da lista.
+
+\subsection{Algoritmo bBinRec}
+
+Já o algoritmo \textbf{bBinRec} foi implementado da seguinte maneira 
+
+\begin{lstlisting}[language=C++]
+int bBinRec(vector<int> &lista,int esq, int dir, int x ){
+    if (esq>dir) {
+        return -1;
+    }
+    int m = (esq + dir) / 2;
+    if (lista[m] == x) {
+        return m;
+    }
+    if (lista[m] > x){
+        return bBinRec(lista, esq, m - 1, x);
+    }else{
+        return bBinRec(lista, m + 1, dir, x);
+    }
+}
+\end{lstlisting}
+
+\subsection{Análise do bBinRec}
+
+É possível reparar que a função é diferente da \textbf{buscaBinaria} pois chama a si mesma em cada passo. Cada chamada reduz o intervalo de busca, mas em vez de usar um loop, ela continua chamando a função com novos valores. Outra diferença é que a função \textbf{bBinRec} verifica \texttt{lista[m] == x} em cada chamada, permitindo que a função retorne imediatamente se o elemento for encontrado. Portanto, isso mudará a complexidade, tendo casos destintos, diferente do algoritmo anterior.
+Em suma teremos o seguinte:
+
+\begin{itemize}
+	\item \textbf{Melhor Caso:} $O(1)$ — o elemento está no meio na primeira chamada.
+	\item \textbf{Caso Médio:} $O(\log_2 n)$ — o elemento está em uma posição aleatória e requer, em média, $\log_2 n$ divisões.
+	\item \textbf{Pior Caso:} $O(\log_2 n)$ — o elemento não está presente ou está no final da lista, e o algoritmo precisa dividir o intervalo até se esgotar.
+\end{itemize}
+
+\subsection{Resultados do bBinRec}
+
+A versão recursiva é ligeiramente mais rápida na prática, pois pode interromper o processo assim que encontra o elemento, sem precisar fazer verificações adicionais no intervalo.
+Portanto, o algoritmo \textbf{bBinRec} teve a seguinte performace nos testes:
+
+\begin{table}[h!]
+	\centering
+	\caption{Tabela de resultados de bBinRec}
+	\label{tab:bBin_rec_result}
+	\begin{tabular}{lrrrr}
+		\toprule
+		Lista   & n = 100   & n = 1000  & n = 10000 \\
+		\midrule
+		L1      & 80 ps    & 60 ps    & 70 ps  \\
+		L2      & 40 ps    & 51 ps    & 71 ps  \\
+		L3      & 60 ps    & 50 ps    & 50 ps  \\
+		L4      & 50 ps    & 50 ps    & 60 ps  \\
+		L5      & 50 ps    & 50 ps    & 60 ps  \\
+		\midrule
+		Médias  & 56 ps  & 52.2 ps  & 62.2 ps \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+Novamente, perceptivel que a Lista 1 com 100 números foi um outlier em nossa tabela, alterando o valor da média drasticamente tornando-a atípica. Entretanto podemos ver como nos outros casos o tempo é crescente levando em conta o tamanho da lista.
+
+\subsection{Comparação dos algoritmos}
+
+É possível perceber que o \textbf{bBinRec} performa melhor em todos os testes. De forma mais específica
+
+\begin{itemize}
+  \item \textbf{n = 100:} A média de \textbf{buscaBinaria} é de 90 ps, enquanto a de \textbf{bBinRec} é de 56 ps.
+
+  \item \textbf{n = 10000:} Já nesse, caso \textbf{buscaBinaria} apresenta média de 66,2 ps, enquanto \textbf{bBinRec} apresenta 52,2 ps.
+
+  \item \textbf{n = 100000:} Por fim, \textbf{buscaBinaria} tem 110.4 ps de média. Já \textbf{bBinRec}, 62,2 ps.
+\end{itemize}
+
+Assim, ao comparar os resultados dos algoritmos lado a lado, torna-se evidente que a implementação de \textbf{bBinRec} se destaca.
