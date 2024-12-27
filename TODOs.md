@@ -1,30 +1,30 @@
-## TODOs
+# TODOs
 
-### Heap
+## Heap
 
-#### Documentação
+### Documentação
 
 - [ ] Descrever software e hardware
 - [ ] Pseudocódigo do heapsort
 - [ ] Teste com listas de 10.000 a 1.000.000
 - [ ] Analise de resultados
 
-#### Implementação
+### Implementação
 
 - [ ] **Heap**
   - [ ] Max
   - [ ] Min
 - [ ] **HeapSort**
 
-### Árvores binárias
+## Árvores binárias
 
-#### Documentação
+### Documentação
 
 - [ ] Descrever software e hardware
 - [ ] Fluxograma da criação de uma arvore binária
 - [ ] Impressão da árvore em nível com os números {15, 18,20, 35, 32, 38, 30, 40, 32, 45, 48, 52, 60, 50}
 
-#### Implementação
+### Implementação
 
 - [ ] Criação a partir de uma lista
 - [ ] Busca
@@ -37,19 +37,34 @@
   - [ ] Pós-Ordem
   - [ ] Em nível
 
-### Árvores AVL
+## Árvores AVL
 
-#### Documentação
+### Documentação
 
 - [ ] Fluxograma para exclusão de um nó.
 - [ ] Impressão da árvore em nível com os números {15, 18,20, 35, 32, 38, 30, 40, 32, 45, 48, 52, 60, 50}
 
-#### Implementação
+### Implementação
 
 - [ ] Busca
 - [ ] Inserção
 - [ ] Remoção
 - [ ] Rotação
+
+## Árvores Rubro-Negras
+
+### Documentação
+
+- [ ] Descrever ambiente computacional
+- [ ] Fluxograma para exclusão de um nó
+- [ ] Impressão da árvore em nível com os números {15, 18,20, 35, 32, 38, 30, 40, 32, 45, 48, 52, 60, 50}
+
+### Implementação
+
+- [x] Busca
+- [x] Inserção
+- [x] Remoção
+- [x] Rotação
 
 ---
 
