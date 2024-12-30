@@ -1,5 +1,6 @@
 module AVLTree.Core where
 
+import Data.IntMap (insert)
 import Debug.Trace
 import Direction
 import Prelude hiding (
@@ -45,6 +46,22 @@ keyValue :: AVLTree a -> a
 keyValue (Node v _ _) = v
 keyValue Nil = error "no value"
 
+-- so far just working for straight trees, i.e.
+{- leftUnbalanced
+        10
+       /         5
+      5    =>   / \
+     /         3  10
+    3
+-}
+-- TODO: make works for non-straight trees
+{-
+   1       1
+    \       \
+     3  =>   2
+    /         \
+   2           3
+-}
 rotateRight :: (Ord a) => AVLTree a -> AVLTree a
 rotateRight Nil = Nil
 rotateRight t =
@@ -54,6 +71,22 @@ rotateRight t =
             Nil -> t
             Node _ ll lr -> Node (keyValue l) ll (Node (keyValue t) lr r)
 
+-- so far just working for straight trees i.e.
+{- rightUnbalanced
+   3
+    \           5
+     5    =>   / \
+      \       3  10
+       10
+-}
+-- TODO: make works for non-straight trees
+{-
+   3         3
+  /         /
+ 1    =>   2
+  \       /
+   2     1
+-}
 rotateLeft :: (Ord a) => AVLTree a -> AVLTree a
 rotateLeft Nil = Nil
 rotateLeft t =
@@ -63,107 +96,18 @@ rotateLeft t =
             Nil -> t
             Node _ rl rr -> Node (keyValue r) (Node (keyValue t) l rl) rr
 
-insert :: (Ord a) => AVLTree a -> a -> AVLTree a
-insert Nil v = Node v Nil Nil
-insert (Node v l r) v' = undefined
+-- insert without balance
+insert' :: (Ord a) => AVLTree a -> a -> AVLTree a
+insert' Nil v = Node v Nil Nil
+insert' (Node v l r) v'
+    | v <= v' = Node v l (insert' r v')
+    | otherwise = Node v (insert' l v') r
+
+balance :: (Ord a) => AVLTree a -> AVLTree a
+balance Nil = Nil
+balance t
+    | balanced t = t
+    | not $ balanced $ leftTree t = t
 
 delete :: (Ord a) => AVLTree a -> a -> AVLTree a
 delete = undefined
-
-exampleTree1 :: AVLTree Int
-exampleTree1 =
-    Node
-        10
-        ( Node
-            5
-            (Node 3 Nil Nil)
-            (Node 7 Nil Nil)
-        )
-        ( Node
-            15
-            (Node 12 Nil Nil)
-            (Node 18 Nil Nil)
-        )
-
-{-
-        10
-       /  \
-      5    15
-     / \   / \
-    3   7 12 18
--}
-
-exampleTree2 :: AVLTree Int
-exampleTree2 =
-    Node
-        10
-        ( Node
-            5
-            ( Node
-                3
-                ( Node
-                    1
-                    Nil
-                    Nil
-                )
-                Nil
-            )
-            Nil
-        )
-        (Node 15 Nil Nil)
-
-{-
-        10
-       /  \
-      5    15
-     /
-    3
-   /
-  1
--}
-
-exampleTree3 :: AVLTree Int
-exampleTree3 =
-    Node
-        10
-        ( Node
-            5
-            ( Node
-                3
-                Nil
-                Nil
-            )
-            Nil
-        )
-        Nil
-
-{-
-        10
-       /
-      5
-     /
-    3
--}
-
-exampleTree4 :: AVLTree Int
-exampleTree4 =
-    Node
-        3
-        Nil
-        ( Node
-            5
-            Nil
-            ( Node
-                10
-                Nil
-                Nil
-            )
-        )
-
-{-
-   3
-    \
-     5
-      \
-       10
--}
