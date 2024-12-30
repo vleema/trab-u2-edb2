@@ -3,8 +3,21 @@
 
 % the key ``ch:into'' can be used with command \ref{ch:intor} to refere this Chapter.
 %
-% \input{chapters/02_sections/01_avl}
-% \newpage
+
+Conforme mostrado anteriormente, são muitas as vantagens do uso de uma árvore binária, entretanto, imagine um seguinte cenário: Após definida uma raiz de valor x, são adicionados valores maiores que x e maiores entre si. A situação poderia ser representada da seguinte maneira:
+
+TODO: árvore binária que é lista ligada
+
+Perceba que esse caso é o pior cenário, e que ele nada difere de uma lista ligada. Tendo como complexidade de busca e inserção O(n), perdendo assim, todas as vantagens em relação a estruturas mais simples.
+
+Também vale ressaltar que apesar de se tratar do pior caso, não é tão remoto quanto parece, basta que um galho da árvore tenha mais elementos do que seu irmão de nó que é possível observar semelhança com a situação descrita anteriormente. Dada essa situação, árvores com elementos mal distribuídos entre os galhos são ditas \textbf{desbalanceadas}, podendo formalizar a definição da seguinte maneira:
+
+TODO: para toda bintree, | h(bintree.esq) - h(bintree.di) | > 1 => desbalanceada)
+
+TODO: desfecho
+
+\input{chapters/02_sections/01_avl}
+\newpage
 %
 % \input{chapters/02_sections/02_rubro_negra}
 % \newpage
