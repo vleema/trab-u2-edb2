@@ -1,3 +1,6 @@
+## Latex
+latex/output/*
+
 ## Haskell
 dist
 dist-*
