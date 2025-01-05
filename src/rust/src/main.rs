@@ -38,7 +38,7 @@ fn main() -> io::Result<()> {
   )?;
 
   // Alter 10 power here
-  for n in 1..=4 {
+  for n in 4..=6 {
     writeln!(entries_file, "List with {} entries:\n", TEN.pow(n))?;
     run_entry(
       &sort_functions,
