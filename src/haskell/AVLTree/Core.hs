@@ -46,55 +46,17 @@ keyValue :: AVLTree a -> a
 keyValue (Node v _ _) = v
 keyValue Nil = error "no value"
 
--- so far just working for straight trees, i.e.
-{- leftUnbalanced
-        10
-       /         5
-      5    =>   / \
-     /         3  10
-    3
--}
--- TODO: make works for non-straight trees
-{-
-   1       1
-    \       \
-     3  =>   2
-    /         \
-   2           3
--}
-rotateRight :: (Ord a) => AVLTree a -> AVLTree a
-rotateRight Nil = Nil
-rotateRight t =
-    let l = leftTree t
-        r = rightTree t
-     in case l of
-            Nil -> t
-            Node _ ll lr -> Node (keyValue l) ll (Node (keyValue t) lr r)
+rotateR :: (Ord a) => AVLTree a -> AVLTree a
+rotateR (Node e l (Node er lr rr)) = Node er (Node e l lr) rr
 
--- so far just working for straight trees i.e.
-{- rightUnbalanced
-   3
-    \           5
-     5    =>   / \
-      \       3  10
-       10
--}
--- TODO: make works for non-straight trees
-{-
-   3         3
-  /         /
- 1    =>   2
-  \       /
-   2     1
--}
-rotateLeft :: (Ord a) => AVLTree a -> AVLTree a
-rotateLeft Nil = Nil
-rotateLeft t =
-    let l = leftTree t
-        r = rightTree t
-     in case r of
-            Nil -> t
-            Node _ rl rr -> Node (keyValue r) (Node (keyValue t) l rl) rr
+rotateL :: (Ord a) => AVLTree a -> AVLTree a
+rotateL (Node e (Node el ll rl) r) = Node el ll (Node e rl r)
+
+rotateLR :: (Ord a) => AVLTree a -> AVLTree a
+rotateLR (Node e (Node el ll (Node elr lrl lrr)) r) = Node elr (Node el ll lrl) (Node e lrr r)
+
+rotateRL :: (Ord a) => AVLTree a -> AVLTree a
+rotateRL (Node e l (Node er (Node erl rll rlr) rr)) = Node erl (Node e l rll) (Node er rlr rr)
 
 -- insert without balance
 insert' :: (Ord a) => AVLTree a -> a -> AVLTree a
