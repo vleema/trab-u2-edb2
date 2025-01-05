@@ -1,12 +1,111 @@
-\chapter{Árvore Binária}
-\label{ch:bin} % This how you label a chapter and the key (e.g., ch:into) will be used to refer this chapter ``Introduction'' later in the report. 
-% the key ``ch:into'' can be used with command \ref{ch:intor} to refere this Chapter.
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
 
-% \input{chapters/01_sections/01_busca}
-% \newpage
-%
-% \input{chapters/01_sections/02_insercao}
-% \newpage
-%
-% \input{chapters/01_sections/03_remocao}
-% \newpage
+\usepackage{geometry}
+\usepackage{tikz}
+\geometry{a4paper, margin=1in}
+
+\begin{document}
+
+\section*{Árvore Binária}
+
+Para criar uma árvore binária pouco desequilibrada a partir de uma lista de dados de entrada, podemos usar a estratégia de \textbf{divisão e conquista}. A ideia é organizar os dados de entrada, selecionar o elemento do meio como raiz e repetir esse processo para as sub-árvores da esqueda e direita.
+
+\subsection*{Estratégia: Construção Balanceada com Lista Ordenada}
+
+\begin{enumerate}
+    \item \textbf{Ordenar os dados de entrada:}
+    \begin{itemize}
+        \item Se os dados não estiverem ordenados, ordene-os. Isso garante que a árvore seja uma \textit{árvore binária de busca}.
+    \end{itemize}
+
+    \item \textbf{Escolher o elemento do meio como raiz:}
+    \begin{itemize}
+        \item Divida a lista ao meio. O elemento central vai ser a raiz da árvore ou subárvore.
+    \end{itemize}
+
+    \item \textbf{Repetir de forma recursiva:}
+    \begin{itemize}
+        \item Para os elementos à esquerda do meio, crie a subárvore esquerda.
+        \item Para os elementos à direita do meio, crie a subárvore direita.
+    \end{itemize}
+
+    \item \textbf{Continuar até que a lista esteja vazia:}
+    \begin{itemize}
+        \item A recursão terminará quando não houverem mais elementos na lista.
+    \end{itemize}
+\end{enumerate}
+
+\subsection*{Exemplo: Construção da Árvore}
+
+Considere os seguintes dados iniciais:
+
+\[
+80, \; 20, \; 50, \; 30, \; 90, \; 70, \; 10, \; 40, \; 60
+\]
+
+\noindent
+Após ordenar, temos:
+
+\[
+10, \; 20, \; 30, \; 40, \; 50, \; 60, \; 70, \; 80, \; 90
+\]
+
+O elemento central (\textbf{50}) será a raiz.  
+Agora, dividiremos a lista em duas partes:
+\begin{itemize}
+    \item Subárvore esquerda: \(10, 20, 30, 40\)
+    \item Subárvore direita: \(60, 70, 80, 90\)
+\end{itemize}
+
+Construindo visualmente:
+
+\begin{center}
+\begin{tikzpicture}[
+  level distance=1.5cm,
+  level 1/.style={sibling distance=6cm},
+  level 2/.style={sibling distance=3cm},
+  level 3/.style={sibling distance=1.5cm},
+  edge from parent/.style={draw, -latex},
+  every node/.style={circle, draw, minimum size=8mm, font=\footnotesize}
+]
+
+% Raiz
+\node {50}
+  child {node {30}
+    child {node {20}
+      child {node {10}}
+      child[missing]
+    }
+    child {node {40}}
+  }
+  child {node {70}
+    child {node {60}}
+    child {node {80}
+        child[missing]
+        child {node {90}}
+    }
+  };
+
+\end{tikzpicture}
+\end{center}
+
+\subsection*{Explicação do Diagrama}
+\begin{enumerate}
+    \item O nó \textbf{50} é escolhido como raiz da árvore, pois é o elemento central da lista.
+    \item A subárvore esquerda contém os números menores que 50 (\textbf{10, 20, 30, 40}):
+    \begin{itemize}
+        \item O elemento central (\textbf{30}) é escolhido como a raiz da subárvore esquerda.
+        \item Os elementos menores que 30 (\textbf{10, 20}) formam sua subárvore esquerda.
+        \item O elemento \textbf{40} forma a subárvore direita de 30.
+    \end{itemize}
+    \item A subárvore direita contém os números maiores que 50 (\textbf{60, 70, 80, 90}):
+    \begin{itemize}
+        \item O elemento central (\textbf{70}) é escolhido como a raiz da subárvore direita.
+        \item O número \textbf{60} forma sua subárvore à esquerda.
+        \item Os números \textbf{80} e \textbf{90} formam a subárvore à direita.
+    \end{itemize}
+\end{enumerate}
+
+\end{document}
