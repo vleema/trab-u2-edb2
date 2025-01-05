@@ -1,5 +1,5 @@
 use rand::Rng;
-use sort_algorithms::algorithms::*;
+use sort_algorithms::{algorithms::*, heap::heap_sort};
 use std::{
   fs::{self, File, OpenOptions},
   io::{self, Write},
@@ -23,7 +23,7 @@ fn main() -> io::Result<()> {
     ("ITE QUICK SORT", iterative_quick_sort),
     ("REC MERGE SORT", recursive_merge_sort),
     ("ITE MERGE SORT", iterative_merge_sort),
-    // ("HEAP SORT", heap_sort),
+    ("HEAP SORT", heap_sort),
   ]);
 
   fs::create_dir_all("out")?;
