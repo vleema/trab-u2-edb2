@@ -108,4 +108,192 @@ Construindo visualmente:
     \end{itemize}
 \end{enumerate}
 
+\section*{Implementação em C++}
+
+\subsection*{1. Estrutura do Nó}
+\begin{verbatim}
+typedef struct nodo {
+    int chave;
+    struct nodo* esq;
+    struct nodo* dir;
+
+    // Construtor
+    nodo(int chaveNovoNo) : chave(chaveNovoNo), esq(nullptr), dir(nullptr) {}
+
+} no;
+\end{verbatim}
+
+\subsection*{2. Inserir}
+\begin{verbatim}
+no* inserir(no* origem, int chaveNovoNo) {
+    if (origem == nullptr) {
+        return new no(chaveNovoNo);
+    }
+
+    if (chaveNovoNo == origem->chave) {
+        return origem;
+    }
+
+    if (chaveNovoNo < origem->chave) {
+        origem->esq = inserir(origem->esq, chaveNovoNo);
+    } else {
+        origem->dir = inserir(origem->dir, chaveNovoNo);
+    }
+
+    return origem;
+}
+\end{verbatim}
+
+\subsection*{3. Percurso Pré-Ordem}
+\begin{verbatim}
+void pre_ordem(no* pt) {
+    std::cout << pt->chave << std::endl;
+    if (pt->esq != NULL) {
+        pre_ordem(pt->esq);
+    }
+    if (pt->dir != NULL) {
+        pre_ordem(pt->dir);
+    }
+}
+\end{verbatim}
+
+\subsection*{4. Percurso Ordem Simétrica}
+\begin{verbatim}
+void ordem_simetrica(no* pt) {
+    if (pt->esq != NULL) {
+        ordem_simetrica(pt->esq);
+    }
+    std::cout << pt->chave << std::endl;
+    if (pt->dir != NULL) {
+        ordem_simetrica(pt->dir);
+    }
+}
+\end{verbatim}
+
+\subsection*{5. Percurso Pós-Ordem}
+\begin{verbatim}
+void pos_ordem(no* pt) {
+    if (pt->esq != NULL) {
+        pos_ordem(pt->esq);
+    }
+    if (pt->dir != NULL) {
+        pos_ordem(pt->dir);
+    }
+    std::cout << pt->chave << std::endl;
+}
+\end{verbatim}
+
+\subsection*{6. Auxiliar em Nível}
+\begin{verbatim}
+void auxiliar_em_nivel(no* no, int nivel, std::vector<std::vector<int>>& resultados) {
+    if (!no) {
+        return;
+    }
+
+    if (static_cast<int>(resultados.size()) == nivel) {
+        resultados.push_back(std::vector<int>());
+    }
+
+    resultados[nivel].push_back(no->chave);
+
+    auxiliar_em_nivel(no->esq, nivel + 1, resultados);
+    auxiliar_em_nivel(no->dir, nivel + 1, resultados);
+}
+\end{verbatim}
+
+\subsection*{7. Percurso por Nível}
+\begin{verbatim}
+void em_nivel(no* no) {
+    std::vector<std::vector<int>> resultados;
+
+    auxiliar_em_nivel(no, 0, resultados);
+
+    for (const auto& nivel : resultados) {
+        for (int chave : nivel) {
+            std::cout << chave << " ";
+        }
+        std::cout << "| ";
+    }
+    std::cout << std::endl;
+}
+\end{verbatim}
+
+\subsection*{8. Busca}
+\begin{verbatim}
+no* busca(no* raiz, int chave) {
+    if (raiz == NULL || raiz->chave == chave) {
+        return raiz;
+    }
+    if (chave < raiz->chave) {
+        return busca(raiz->esq, chave);
+    }
+    if (chave > raiz->chave) {
+        return busca(raiz->dir, chave);
+    }
+    return NULL;
+}
+\end{verbatim}
+
+\subsection*{9. Busca Iterativa}
+\begin{verbatim}
+no* busca_iterativa(no* raiz, int chave) {
+    while (raiz != NULL && raiz->chave != chave) {
+        if (chave < raiz->chave) {
+            raiz = raiz->esq;
+        } else {
+            raiz = raiz->dir;
+        }
+    }
+    return raiz;
+}
+\end{verbatim}
+
+\subsection*{10. Encontra Mínimo}
+\begin{verbatim}
+no* encontra_minimo(no* raiz) {
+    while (raiz && raiz->esq) {
+        raiz = raiz->esq;
+    }
+    return raiz;
+}
+\end{verbatim}
+
+\subsection*{11. Remover}
+\begin{verbatim}
+no* remover(no* root, int chave) {
+    if (!root)
+        return nullptr;
+
+    if (chave < root->chave) {
+        root->esq = remover(root->esq, chave);
+    } else if (chave > root->chave) {
+        root->dir = remover(root->dir, chave);
+    } else {
+        // Caso 1: Nó é uma folha
+        if (!root->esq && !root->dir) {
+            delete root;
+            return nullptr;
+        }
+        // Caso 2: Nó tem um único filho
+        else if (!root->esq) {
+            no* temp = root->dir;
+            delete root;
+            return temp;
+        } else if (!root->dir) {
+            no* temp = root->esq;
+            delete root;
+            return temp;
+        }
+        // Caso 3: Nó tem dois filhos
+        else {
+            no* temp = encontra_minimo(root->dir);
+            root->chave = temp->chave;
+            root->dir = remover(root->dir, temp->chave);
+        }
+    }
+    return root;
+}
+\end{verbatim}
+
+
 \end{document}
