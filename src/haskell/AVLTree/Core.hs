@@ -1,11 +1,9 @@
 module AVLTree.Core where
 
-import Data.IntMap (insert)
+import Data.Bits (Bits (rotate))
 import Debug.Trace
 import Direction
-import Prelude hiding (
-
- )
+import Prelude
 
 data AVLTree a
     = Node
@@ -34,6 +32,14 @@ balanced (Node _ l r)
     | not (balanced r) = False
     | otherwise = True
 
+findUnbalancedNode :: (Ord a) => AVLTree a -> Maybe [Direction]
+findUnbalancedNode Nil = Nothing
+findUnbalancedNode t@(Node v l r)
+    | balanced t = Nothing
+    | not (balanced t) && balanced l && balanced r = Just []
+    | balanced l = fmap (R :) (findUnbalancedNode r)
+    | otherwise = fmap (L :) (findUnbalancedNode l)
+
 rightTree :: AVLTree a -> AVLTree a
 rightTree Nil = Nil
 rightTree (Node _ _ r) = r
@@ -46,6 +52,7 @@ keyValue :: AVLTree a -> a
 keyValue (Node v _ _) = v
 keyValue Nil = error "no value"
 
+-- Rotations, @evgenii-malov
 rotateR :: (Ord a) => AVLTree a -> AVLTree a
 rotateR (Node e l (Node er lr rr)) = Node er (Node e l lr) rr
 
@@ -58,6 +65,13 @@ rotateLR (Node e (Node el ll (Node elr lrl lrr)) r) = Node elr (Node el ll lrl) 
 rotateRL :: (Ord a) => AVLTree a -> AVLTree a
 rotateRL (Node e l (Node er (Node erl rll rlr) rr)) = Node erl (Node e l rll) (Node er rlr rr)
 
+rotateAt :: (Ord a) => AVLTree a -> Maybe [Direction] -> AVLTree a
+rotateAt t Nothing = t
+rotateAt (Node v l r) (Just (d :: ds)) = case d of
+    R -> Node v l (rotateAt r (Just ds))
+    L -> Node v (rotateAt l Just ds) r
+rotateAt (Node v l r) (Just []) = undefined -- é pra rotacionar aqui, agora é só ver qual rotação usar
+
 -- insert without balance
 insert' :: (Ord a) => AVLTree a -> a -> AVLTree a
 insert' Nil v = Node v Nil Nil
@@ -67,9 +81,7 @@ insert' (Node v l r) v'
 
 balance :: (Ord a) => AVLTree a -> AVLTree a
 balance Nil = Nil
-balance t
-    | balanced t = t
-    | not $ balanced $ leftTree t = t
+balance t@(Node v l r) = rotateA
 
-delete :: (Ord a) => AVLTree a -> a -> AVLTree a
-delete = undefined
+insert :: (Ord a) => AVLTree a -> a -> AVLTree a
+insert v t = balance (insert' v t)
