@@ -1,6 +1,5 @@
 module AVLTree.Core where
 
-import Data.Bits (Bits (rotate))
 import Debug.Trace
 import Direction
 import Prelude
@@ -65,23 +64,41 @@ rotateLR (Node e (Node el ll (Node elr lrl lrr)) r) = Node elr (Node el ll lrl) 
 rotateRL :: (Ord a) => AVLTree a -> AVLTree a
 rotateRL (Node e l (Node er (Node erl rll rlr) rr)) = Node erl (Node e l rll) (Node er rlr rr)
 
+rotate :: (Ord a) => AVLTree a -> AVLTree a
+rotate Nil = Nil
+rotate t@(Node v l r)
+    | balanceFactor > 1 && height (leftTree t) >= height (rightTree (leftTree t)) = rotateL t
+    | balanceFactor < -1 && height (rightTree t) >= height (leftTree (rightTree t)) = rotateR t
+    | balanceFactor > 1 = rotateLR t
+    | balanceFactor < -1 = rotateRL t
+  where
+    balanceFactor = height l - height r
+
 rotateAt :: (Ord a) => AVLTree a -> Maybe [Direction] -> AVLTree a
 rotateAt t Nothing = t
-rotateAt (Node v l r) (Just (d :: ds)) = case d of
+rotateAt (Node v l r) (Just (d : ds)) = case d of
     R -> Node v l (rotateAt r (Just ds))
-    L -> Node v (rotateAt l Just ds) r
-rotateAt (Node v l r) (Just []) = undefined -- é pra rotacionar aqui, agora é só ver qual rotação usar
+    L -> Node v (rotateAt l (Just ds)) r
+rotateAt t (Just []) = rotate t
 
 -- insert without balance
-insert' :: (Ord a) => AVLTree a -> a -> AVLTree a
-insert' Nil v = Node v Nil Nil
-insert' (Node v l r) v'
-    | v <= v' = Node v l (insert' r v')
-    | otherwise = Node v (insert' l v') r
+insert' :: (Ord a) => a -> AVLTree a -> AVLTree a
+insert' v Nil = Node v Nil Nil
+insert' v' (Node v l r)
+    | v <= v' = Node v l (insert' v' r)
+    | otherwise = Node v (insert' v' l) r
 
-balance :: (Ord a) => AVLTree a -> AVLTree a
-balance Nil = Nil
-balance t@(Node v l r) = rotateA
+insert :: (Ord a) => a -> AVLTree a -> AVLTree a
+insert v t =
+    let treeAfterInsertion = insert' v t
+     in rotateAt treeAfterInsertion (findUnbalancedNode treeAfterInsertion)
 
-insert :: (Ord a) => AVLTree a -> a -> AVLTree a
-insert v t = balance (insert' v t)
+-- pending node remotion
+remove :: (Ord a) => a -> AVLTree a -> AVLTree a
+remove _ Nil = Nil
+remove n (Node v Nil Nil)
+    | n == v = Nil
+    | otherwise = Node v Nil Nil
+remove n (Node k l r)
+    | n <= k = remove n l
+    | otherwise = remove n r
