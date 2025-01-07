@@ -113,6 +113,7 @@ no* busca_iterativa(no* raiz, int chave){
     return raiz;
 }
 
+//Pega o valor mínimo da árvore ou subárvore
 no* encontra_minimo(no* raiz){
     while(raiz && raiz->esq){
         raiz = raiz->esq;
