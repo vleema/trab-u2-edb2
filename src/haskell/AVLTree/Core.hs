@@ -64,13 +64,21 @@ rotateLR (Node e (Node el ll (Node elr lrl lrr)) r) = Node elr (Node el ll lrl) 
 rotateRL :: (Ord a) => AVLTree a -> AVLTree a
 rotateRL (Node e l (Node er (Node erl rll rlr) rr)) = Node erl (Node e l rll) (Node er rlr rr)
 
-rotate :: (Ord a) => AVLTree a -> AVLTree a
-rotate Nil = Nil
-rotate t@(Node v l r)
-    | balanceFactor > 1 && height (leftTree t) >= height (rightTree (leftTree t)) = rotateL t
-    | balanceFactor < -1 && height (rightTree t) >= height (leftTree (rightTree t)) = rotateR t
-    | balanceFactor > 1 = rotateLR t
-    | balanceFactor < -1 = rotateRL t
+rotateNode :: (Ord a) => AVLTree a -> AVLTree a
+rotateNode Nil = Nil
+rotateNode t@(Node _ l r)
+    | balanceFactor < -1 && height (left r) < height (right r) -- SR RR
+        =
+        trace "Rotation R" rotateR t
+    | balanceFactor > 1 && height (right l) < height (left l) -- SR LL
+        =
+        trace "Rotation L" rotateL t
+    | balanceFactor < -1 && height (left r) > height (right r) -- DR RL
+        =
+        trace "Rotation RL" rotateRL t
+    | balanceFactor > 1 && height (right l) > height (left l) -- DR LR
+        =
+        trace "Rotation LR" rotateLR t
   where
     balanceFactor = height l - height r
 
@@ -79,7 +87,7 @@ rotateAt t Nothing = t
 rotateAt (Node v l r) (Just (d : ds)) = case d of
     R -> Node v l (rotateAt r (Just ds))
     L -> Node v (rotateAt l (Just ds)) r
-rotateAt t (Just []) = rotate t
+rotateAt t (Just []) = rotateNode t
 
 -- insert without balance
 insert' :: (Ord a) => a -> AVLTree a -> AVLTree a
@@ -94,11 +102,11 @@ insert v t =
      in rotateAt treeAfterInsertion (findUnbalancedNode treeAfterInsertion)
 
 -- pending node remotion
-remove :: (Ord a) => a -> AVLTree a -> AVLTree a
-remove _ Nil = Nil
-remove n (Node v Nil Nil)
-    | n == v = Nil
-    | otherwise = Node v Nil Nil
-remove n (Node k l r)
-    | n <= k = remove n l
-    | otherwise = remove n r
+-- remove :: (Ord a) => a -> AVLTree a -> AVLTree a
+-- remove _ Nil = Nil
+-- remove n (Node v Nil Nil)
+--     | n == v = Nil
+--     | otherwise = Node v Nil Nil
+-- remove n (Node k l r)
+--     | n <= k = remove n l
+--     | otherwise = remove n r
