@@ -38,4 +38,12 @@ prettyPrint' pd pp level (Node a l r) =
         PLeft -> pp
         NoParent -> pp
 
-prettyPrint t = putStrLn (intercalate "\n" (prettyPrint' NoParent [] 0 t))
+-- prettyPrint t = putStrLn (intercalate "\n" (prettyPrint' NoParent [] 0 t))
+
+-- Convert the tree into a single string representation
+prettyTree :: (Show a) => AVLTree a -> String
+prettyTree t = intercalate "\n" (prettyPrint' NoParent [] 0 t)
+
+-- Create an instance of Show for AVLTree
+instance (Show a) => Show (AVLTree a) where
+    show = prettyTree
