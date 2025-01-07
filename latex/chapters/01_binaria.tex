@@ -1,6 +1,9 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{float}
 
 \usepackage{geometry}
 \usepackage{tikz}
@@ -38,262 +41,261 @@ Para criar uma árvore binária pouco desequilibrada a partir de uma lista de da
 \end{enumerate}
 
 \subsection*{Exemplo: Construção da Árvore}
-
 Considere os seguintes dados iniciais:
 
 \[
-80, \; 20, \; 50, \; 30, \; 90, \; 70, \; 10, \; 40, \; 60
+10, \; 2, \; 5, \; 3, \; 9, \; 7, \; 1, \; 4, \; 6
 \]
 
-\noindent
-Após ordenar, temos:
+Primeiro, ordenaremos os valores.
 
 \[
-10, \; 20, \; 30, \; 40, \; 50, \; 60, \; 70, \; 80, \; 90
+1, \; 2, \; 3, \; 4, \; 5, \; 6, \; 7, \; 9, \; 10
 \]
 
-O elemento central (\textbf{50}) será a raiz.  
-Agora, dividiremos a lista em duas partes:
-\begin{itemize}
-    \item Subárvore esquerda: \(10, 20, 30, 40\)
-    \item Subárvore direita: \(60, 70, 80, 90\)
-\end{itemize}
-
-Construindo visualmente:
-
-\begin{center}
-\begin{tikzpicture}[
-  level distance=1.5cm,
-  level 1/.style={sibling distance=6cm},
-  level 2/.style={sibling distance=3cm},
-  level 3/.style={sibling distance=1.5cm},
-  edge from parent/.style={draw, -latex},
-  every node/.style={circle, draw, minimum size=8mm, font=\footnotesize}
-]
-
-% Raiz
-\node {50}
-  child {node {30}
-    child {node {20}
-      child {node {10}}
-      child[missing]
-    }
-    child {node {40}}
-  }
-  child {node {70}
-    child {node {60}}
-    child {node {80}
-        child[missing]
-        child {node {90}}
-    }
-  };
-
-\end{tikzpicture}
-\end{center}
-
-\subsection*{Explicação do Diagrama}
 \begin{enumerate}
-    \item O nó \textbf{50} é escolhido como raiz da árvore, pois é o elemento central da lista.
-    \item A subárvore esquerda contém os números menores que 50 (\textbf{10, 20, 30, 40}):
+    \item O nó \textbf{5} é escolhido como raiz da árvore, pois é o elemento central da lista.
+    
+    \begin{figure}[!ht]
+    	\centering
+    	\includegraphics[scale=0.7]{figures/binaria/passo1.png}
+    	\label{fig:bubble_sort_example}
+    \end{figure}
+    
+    \item A subárvore esquerda contém os números menores que 5 (\textbf{1, 2, 3, 4}) e a da direita contém os números maiores que 5 (\textbf{6, 7, 9, 10})
     \begin{itemize}
-        \item O elemento central (\textbf{30}) é escolhido como a raiz da subárvore esquerda.
-        \item Os elementos menores que 30 (\textbf{10, 20}) formam sua subárvore esquerda.
-        \item O elemento \textbf{40} forma a subárvore direita de 30.
+        \item O elemento central (\textbf{2}) é escolhido como a raiz da subárvore esquerda.
+        \item O elemento central (\textbf{7}) é escolhido como a raiz da subárvore direita.
     \end{itemize}
-    \item A subárvore direita contém os números maiores que 50 (\textbf{60, 70, 80, 90}):
+    
+    \begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=0.7]{figures/binaria/passo2.png}
+	\label{fig:bubble_sort_example}
+    \end{figure}
+    
+    \item Repetimos o processo a partir dos nós 2 e 7
     \begin{itemize}
-        \item O elemento central (\textbf{70}) é escolhido como a raiz da subárvore direita.
-        \item O número \textbf{60} forma sua subárvore à esquerda.
-        \item Os números \textbf{80} e \textbf{90} formam a subárvore à direita.
+        \item A subárvore esquerda de 2 contém os números menores que 2 (\textbf{1}) e a da direita contém os números maiores que 2 (\textbf{3, 4})
+        \item (\textbf{1}) é escolhido como raíz da árvore esquerda de 2
+        \item A subárvore esquerda de 7 contém os números menores que 7 (\textbf{6}) e a da direita contém os números maiores que 7 (\textbf{9, 10})
+        \item (\textbf{6}) é escolhido como raíz da árvore esquerda de 7
     \end{itemize}
+    
+    \begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=0.7]{figures/binaria/passo3.png}
+	\label{fig:bubble_sort_example}
+    \end{figure}
+    
+    \item Finalizamos a árvore
+    \begin{itemize}
+        \item O elemento central (\textbf{3}) da árvore direita de 2 é escolhido como a raiz da subárvore direita.
+        \item Como (\textbf{4}) é maior que 3, ele será a  raiz da subárvore direita de 3.
+        \item O elemento central (\textbf{9}) da árvore direita de 7 é escolhido como a raiz da subárvore direita.
+        \item Como (\textbf{10}) é maior que 9, ele será a raiz da subárvore direita de 9.
+    \end{itemize}
+
+    \begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{figures/binaria/passo4.png}
+	\label{fig:bubble_sort_example}
+    \end{figure}
 \end{enumerate}
 
 \section*{Implementação em C++}
 
 \subsection*{1. Estrutura do Nó}
-\begin{verbatim}
-typedef struct nodo {
-    int chave;
-    struct nodo* esq;
-    struct nodo* dir;
+\begin{algorithm}[H]
+\caption{Estrutura do Nó}
+\begin{algorithmic}[1]
+\State \textbf{typedef struct nodo} 
+\State \quad \textbf{int} chave
+\State \quad \textbf{struct nodo*} esq
+\State \quad \textbf{struct nodo*} dir
+\State \quad Construtor: \textbf{nodo(int chaveNovoNo)}
+\State \quad \quad chave $\gets$ chaveNovoNo
+\State \quad \quad esq $\gets$ nullptr
+\State \quad \quad dir $\gets$ nullptr
+\end{algorithmic}
+\end{algorithm}
 
-    // Construtor
-    nodo(int chaveNovoNo) : chave(chaveNovoNo), esq(nullptr), dir(nullptr) {}
-
-} no;
-\end{verbatim}
-
-\subsection*{2. Inserir}
-\begin{verbatim}
-no* inserir(no* origem, int chaveNovoNo) {
-    if (origem == nullptr) {
-        return new no(chaveNovoNo);
-    }
-
-    if (chaveNovoNo == origem->chave) {
-        return origem;
-    }
-
-    if (chaveNovoNo < origem->chave) {
-        origem->esq = inserir(origem->esq, chaveNovoNo);
-    } else {
-        origem->dir = inserir(origem->dir, chaveNovoNo);
-    }
-
-    return origem;
-}
-\end{verbatim}
+\subsection*{2. Inserção}
+\begin{algorithm}[H]
+\caption{Inserir}
+\begin{algorithmic}[1]
+\Function{inserir}{origem, chaveNovoNo}
+    \If{origem = nullptr}
+        \State \Return novo nó(chaveNovoNo)
+    \EndIf
+    \If{chaveNovoNo = origem.chave}
+        \State \Return origem
+    \ElsIf{chaveNovoNo $<$ origem.chave}
+        \State origem.esq $\gets$ \Call{inserir}{origem.esq, chaveNovoNo}
+    \Else
+        \State origem.dir $\gets$ \Call{inserir}{origem.dir, chaveNovoNo}
+    \EndIf
+    \State \Return origem
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 \subsection*{3. Percurso Pré-Ordem}
-\begin{verbatim}
-void pre_ordem(no* pt) {
-    std::cout << pt->chave << std::endl;
-    if (pt->esq != NULL) {
-        pre_ordem(pt->esq);
-    }
-    if (pt->dir != NULL) {
-        pre_ordem(pt->dir);
-    }
-}
-\end{verbatim}
+\begin{algorithm}[H]
+\caption{Percurso Pré-Ordem}
+\begin{algorithmic}[1]
+\Function{pre\_ordem}{pt}
+    \If{pt $\neq$ nullptr}
+        \State \textbf{print} pt.chave
+        \State \Call{pre\_ordem}{pt.esq}
+        \State \Call{pre\_ordem}{pt.dir}
+    \EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 \subsection*{4. Percurso Ordem Simétrica}
-\begin{verbatim}
-void ordem_simetrica(no* pt) {
-    if (pt->esq != NULL) {
-        ordem_simetrica(pt->esq);
-    }
-    std::cout << pt->chave << std::endl;
-    if (pt->dir != NULL) {
-        ordem_simetrica(pt->dir);
-    }
-}
-\end{verbatim}
+\begin{algorithm}[H]
+\caption{Percurso Ordem Simétrica}
+\begin{algorithmic}[1]
+\Function{ordem\_simetrica}{pt}
+    \If{pt $\neq$ nullptr}
+        \State \Call{ordem\_simetrica}{pt.esq}
+        \State \textbf{print} pt.chave
+        \State \Call{ordem\_simetrica}{pt.dir}
+    \EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 \subsection*{5. Percurso Pós-Ordem}
-\begin{verbatim}
-void pos_ordem(no* pt) {
-    if (pt->esq != NULL) {
-        pos_ordem(pt->esq);
-    }
-    if (pt->dir != NULL) {
-        pos_ordem(pt->dir);
-    }
-    std::cout << pt->chave << std::endl;
-}
-\end{verbatim}
+\begin{algorithm}[H]
+\caption{Percurso Pós-Ordem}
+\begin{algorithmic}[1]
+\Function{pos\_ordem}{pt}
+    \If{pt $\neq$ nullptr}
+        \State \Call{pos\_ordem}{pt.esq}
+        \State \Call{pos\_ordem}{pt.dir}
+        \State \textbf{print} pt.chave
+    \EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 \subsection*{6. Auxiliar em Nível}
-\begin{verbatim}
-void auxiliar_em_nivel(no* no, int nivel, std::vector<std::vector<int>>& resultados) {
-    if (!no) {
-        return;
-    }
-
-    if (static_cast<int>(resultados.size()) == nivel) {
-        resultados.push_back(std::vector<int>());
-    }
-
-    resultados[nivel].push_back(no->chave);
-
-    auxiliar_em_nivel(no->esq, nivel + 1, resultados);
-    auxiliar_em_nivel(no->dir, nivel + 1, resultados);
-}
-\end{verbatim}
+\begin{algorithm}[H]
+\caption{Auxiliar em Nível}
+\begin{algorithmic}[1]
+\Function{auxiliar\_em\_nivel}{no, nivel, resultados}
+    \If{no = nullptr}
+        \State \Return
+    \EndIf
+    \If{\textbf{size}(resultados) = nivel}
+        \State \textbf{add} nova lista em resultados
+    \EndIf
+    \State resultados[nivel].\textbf{push\_back}(no.chave)
+    \State \Call{auxiliar\_em\_nivel}{no.esq, nivel+1, resultados}
+    \State \Call{auxiliar\_em\_nivel}{no.dir, nivel+1, resultados}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 \subsection*{7. Percurso por Nível}
-\begin{verbatim}
-void em_nivel(no* no) {
-    std::vector<std::vector<int>> resultados;
-
-    auxiliar_em_nivel(no, 0, resultados);
-
-    for (const auto& nivel : resultados) {
-        for (int chave : nivel) {
-            std::cout << chave << " ";
-        }
-        std::cout << "| ";
-    }
-    std::cout << std::endl;
-}
-\end{verbatim}
+\begin{algorithm}[H][H]
+\caption{Percurso por Nível}
+\begin{algorithmic}[1]
+\Function{em\_nivel}{no}
+    \State resultados $\gets$ lista vazia
+    \State \Call{auxiliar\_em\_nivel}{no, 0, resultados}
+    \For{cada nivel em resultados}
+        \For{cada chave em nivel}
+            \State \textbf{print} chave
+        \EndFor
+        \State \textbf{print} "|"
+    \EndFor
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 \subsection*{8. Busca}
-\begin{verbatim}
-no* busca(no* raiz, int chave) {
-    if (raiz == NULL || raiz->chave == chave) {
-        return raiz;
-    }
-    if (chave < raiz->chave) {
-        return busca(raiz->esq, chave);
-    }
-    if (chave > raiz->chave) {
-        return busca(raiz->dir, chave);
-    }
-    return NULL;
-}
-\end{verbatim}
+\begin{algorithm}[H]
+\caption{Busca}
+\begin{algorithmic}[1]
+\Function{busca}{raiz, chave}
+    \If{raiz = nullptr OR raiz.chave = chave}
+        \State \Return raiz
+    \ElsIf{chave $<$ raiz.chave}
+        \State \Return \Call{busca}{raiz.esq, chave}
+    \Else
+        \State \Return \Call{busca}{raiz.dir, chave}
+    \EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 \subsection*{9. Busca Iterativa}
-\begin{verbatim}
-no* busca_iterativa(no* raiz, int chave) {
-    while (raiz != NULL && raiz->chave != chave) {
-        if (chave < raiz->chave) {
-            raiz = raiz->esq;
-        } else {
-            raiz = raiz->dir;
-        }
-    }
-    return raiz;
-}
-\end{verbatim}
+\begin{algorithm}[H]
+\caption{Busca Iterativa}
+\begin{algorithmic}[1]
+\Function{busca\_iterativa}{raiz, chave}
+    \While{raiz $\neq$ nullptr AND raiz.chave $\neq$ chave}
+        \If{chave $<$ raiz.chave}
+            \State raiz $\gets$ raiz.esq
+        \Else
+            \State raiz $\gets$ raiz.dir
+        \EndIf
+    \EndWhile
+    \State \Return raiz
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
-\subsection*{10. Encontra Mínimo}
-\begin{verbatim}
-no* encontra_minimo(no* raiz) {
-    while (raiz && raiz->esq) {
-        raiz = raiz->esq;
-    }
-    return raiz;
-}
-\end{verbatim}
+\subsection*{10. Encontrar Mínimo}
+\begin{algorithm}[H]
+\caption{Encontra Mínimo}
+\begin{algorithmic}[1]
+\Function{encontra\_minimo}{raiz}
+    \While{raiz $\neq$ nullptr AND raiz.esq $\neq$ nullptr}
+        \State raiz $\gets$ raiz.esq
+    \EndWhile
+    \State \Return raiz
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
-\subsection*{11. Remover}
-\begin{verbatim}
-no* remover(no* root, int chave) {
-    if (!root)
-        return nullptr;
-
-    if (chave < root->chave) {
-        root->esq = remover(root->esq, chave);
-    } else if (chave > root->chave) {
-        root->dir = remover(root->dir, chave);
-    } else {
-        // Caso 1: Nó é uma folha
-        if (!root->esq && !root->dir) {
-            delete root;
-            return nullptr;
-        }
-        // Caso 2: Nó tem um único filho
-        else if (!root->esq) {
-            no* temp = root->dir;
-            delete root;
-            return temp;
-        } else if (!root->dir) {
-            no* temp = root->esq;
-            delete root;
-            return temp;
-        }
-        // Caso 3: Nó tem dois filhos
-        else {
-            no* temp = encontra_minimo(root->dir);
-            root->chave = temp->chave;
-            root->dir = remover(root->dir, temp->chave);
-        }
-    }
-    return root;
-}
-\end{verbatim}
-
+\subsection*{11. Remoção}
+\begin{algorithm}[H]
+\caption{Remover}
+\begin{algorithmic}[1]
+\Function{remover}{root, chave}
+    \If{root = nullptr}
+        \State \Return nullptr
+    \ElsIf{chave $<$ root.chave}
+        \State root.esq $\gets$ \Call{remover}{root.esq, chave}
+    \ElsIf{chave $>$ root.chave}
+        \State root.dir $\gets$ \Call{remover}{root.dir, chave}
+    \Else
+        \If{root.esq = nullptr AND root.dir = nullptr}
+            \State \textbf{delete} root
+            \State \Return nullptr
+        \ElsIf{root.esq = nullptr}
+            \State temp $\gets$ root.dir
+            \State \textbf{delete} root
+            \State \Return temp
+        \ElsIf{root.dir = nullptr}
+            \State temp $\gets$ root.esq
+            \State \textbf{delete} root
+            \State \Return temp
+        \Else
+            \State temp $\gets$ \Call{encontra\_minimo}{root.dir}
+            \State root.chave $\gets$ temp.chave
+            \State root.dir $\gets$ \Call{remover}{root.dir, temp.chave}
+        \EndIf
+    \EndIf
+    \State \Return root
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 \end{document}
+
