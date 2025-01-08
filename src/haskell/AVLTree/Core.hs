@@ -92,21 +92,43 @@ rotateAt t (Just []) = rotateNode t
 -- insert without balance
 insert' :: (Ord a) => a -> AVLTree a -> AVLTree a
 insert' v Nil = Node v Nil Nil
-insert' v' (Node v l r)
-    | v <= v' = Node v l (insert' v' r)
-    | otherwise = Node v (insert' v' l) r
+insert' v (Node v' l r)
+    | v' <= v = Node v' l (insert' v r)
+    | otherwise = Node v' (insert' v l) r
 
 insert :: (Ord a) => a -> AVLTree a -> AVLTree a
 insert v t =
     let treeAfterInsertion = insert' v t
      in rotateAt treeAfterInsertion (findUnbalancedNode treeAfterInsertion)
 
--- pending node remotion
--- remove :: (Ord a) => a -> AVLTree a -> AVLTree a
--- remove _ Nil = Nil
--- remove n (Node v Nil Nil)
---     | n == v = Nil
---     | otherwise = Node v Nil Nil
--- remove n (Node k l r)
---     | n <= k = remove n l
---     | otherwise = remove n r
+removeMin :: (Ord a) => AVLTree a -> (a, AVLTree a)
+removeMin (Node v Nil r) = (v, r)
+removeMin (Node v l r) =
+    let (minValue, newLeft) = removeMin l
+     in (minValue, Node v newLeft r)
+
+-- delete without balance
+remove' :: (Ord a) => a -> AVLTree a -> AVLTree a
+remove' _ Nil = Nil
+remove' n t@(Node v Nil Nil) -- Leaf
+    | n == v = Nil
+    | otherwise = trace "Element does not exist" t
+remove' n (Node v l Nil) -- Single son node
+    | n == v = l
+    | n < v = Node v (remove' n l) Nil
+    | otherwise = trace "Element does not exist" (Node v l Nil)
+remove' n (Node v Nil r) -- Single son node
+    | n == v = r
+    | n > v = Node v Nil (remove' n r)
+    | otherwise = trace "Element does not exist" (Node v Nil r)
+remove' n (Node v l r) -- Two son node
+    | n < v = Node v (remove' n l) r
+    | n > v = Node v l (remove' n r)
+    | n == v =
+        let (successor, newRight) = removeMin r
+         in Node successor l newRight
+
+remove :: (Ord a) => a -> AVLTree a -> AVLTree a
+remove v t =
+    let treeAfterRemotion = remove' v t
+     in rotateAt treeAfterRemotion (findUnbalancedNode treeAfterRemotion)
