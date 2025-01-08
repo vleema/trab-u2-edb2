@@ -83,21 +83,37 @@ TEST(ArvoreBinaria, Traversal) {
     no* raiz = nullptr;
 
     // Insere elementos
-    raiz = inserir(raiz, 50);
     raiz = inserir(raiz, 30);
-    raiz = inserir(raiz, 10);
+    raiz = inserir(raiz, 25);
+    raiz = inserir(raiz, 39);
+    raiz = inserir(raiz, 20);
+    raiz = inserir(raiz, 27);
+    raiz = inserir(raiz, 35);
+    raiz = inserir(raiz, 42);
+    raiz = inserir(raiz, 23);
     raiz = inserir(raiz, 40);
-    raiz = inserir(raiz, 60);
 
     // Testa ordem simétrica
     testing::internal::CaptureStdout();
     ordem_simetrica(raiz);
     std::string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ(output, "10\n30\n40\n50\n60\n");
+    EXPECT_EQ(output, "20\n23\n25\n27\n30\n35\n39\n40\n42");
 
     // Testa pré-ordem
     testing::internal::CaptureStdout();
     pre_ordem(raiz);
     output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ(output, "50\n30\n10\n40\n60\n");
+    EXPECT_EQ(output, "30\n25\n20\n23\n27\n39\n35\n42\n40");
+
+    // Testa pós-ordem
+    testing::internal::CaptureStdout();
+    ordem_simetrica(raiz);
+    output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "23\n20\n27\n25\n35\n40\n42\n39\n30");
+
+    // Testa em-nível
+    testing::internal::CaptureStdout();
+    pre_ordem(raiz);
+    output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "30\n25\n39\n20\n27\n35\n42\n23\n40");
 }

@@ -84,7 +84,7 @@ void em_nivel(no* no){
         for(int chave : nivel){
             std::cout << chave << " ";
         }
-        std::cout << "| ";
+        //std::cout << "| ";
     }
     std::cout << std::endl;
 }
@@ -164,17 +164,23 @@ int main(){
     // raiz = inserir(raiz, 30);
     // raiz = inserir(raiz, 50);
     // raiz = inserir(raiz, 60);
-    raiz = inserir(raiz, 50);
-    raiz = inserir(raiz, 35);
-    raiz = inserir(raiz, 70);
-    raiz = inserir(raiz, 25);
-    raiz = inserir(raiz, 40);
-    raiz = inserir(raiz, 65);
-    raiz = inserir(raiz, 90);
     raiz = inserir(raiz, 30);
-    raiz = inserir(raiz, 80);
+    raiz = inserir(raiz, 25);
+    raiz = inserir(raiz, 39);
+    raiz = inserir(raiz, 20);
+    raiz = inserir(raiz, 27);
+    raiz = inserir(raiz, 35);
+    raiz = inserir(raiz, 42);
+    raiz = inserir(raiz, 23);
+    raiz = inserir(raiz, 40);
 
-    em_nivel(raiz);
+    //em_nivel(raiz);
+
+    //pos_ordem(raiz);
+
+    //pre_ordem(raiz);
+
+    ordem_simetrica(raiz);
 
 
 }
