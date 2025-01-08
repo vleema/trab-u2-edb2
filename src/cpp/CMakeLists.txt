@@ -8,6 +8,7 @@ enable_testing()
 
 # Adicionar diretório do Google Test
 add_subdirectory(googletest)
+# add_subdirectory(src)
 
 # Adicionar o executável principal
 add_executable(BinaryTree src/main.cpp)

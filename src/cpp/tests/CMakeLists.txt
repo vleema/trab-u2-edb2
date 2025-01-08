@@ -6,3 +6,6 @@ target_link_libraries(BinaryTreeTests PRIVATE gtest gmock gtest_main)
 
 # Adicionar o teste à suíte de testes do CMake
 add_test(NAME BinaryTreeTests COMMAND BinaryTreeTests)
+
+include(GoogleTest)
+gtest_discover_tests(BinaryTreeTests)

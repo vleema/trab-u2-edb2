@@ -157,42 +157,24 @@ no* remover(no* root, int chave) {
 
 int main(){
     no* raiz = nullptr;
+    // raiz = inserir(raiz, 20);
+    // raiz = inserir(raiz, 10);
+    // raiz = inserir(raiz, 40);
+    // raiz = inserir(raiz, 15);
+    // raiz = inserir(raiz, 30);
+    // raiz = inserir(raiz, 50);
+    // raiz = inserir(raiz, 60);
     raiz = inserir(raiz, 50);
-    raiz = inserir(raiz, 30);
-    raiz = inserir(raiz, 10);
-    raiz = inserir(raiz, 40);
-    raiz = inserir(raiz, 60);
-    raiz = inserir(raiz, 51);
-    raiz = inserir(raiz, 80);
-    raiz = inserir(raiz, 15);
+    raiz = inserir(raiz, 35);
     raiz = inserir(raiz, 70);
+    raiz = inserir(raiz, 25);
+    raiz = inserir(raiz, 40);
+    raiz = inserir(raiz, 65);
+    raiz = inserir(raiz, 90);
+    raiz = inserir(raiz, 30);
+    raiz = inserir(raiz, 80);
 
-    std::cout << "Pré ordem:" << std::endl;
-    pre_ordem(raiz);
-
-    std::cout << "Ordem simétrica:" << std::endl;
-    ordem_simetrica(raiz);
-
-    std::cout << "Pós ordem:" << std::endl;
-    pos_ordem(raiz);
-
-    std::cout << "Em nível:" << std::endl;
     em_nivel(raiz);
 
-    no* teste = busca_iterativa(raiz, 30);
-
-    std::cout << teste->chave << " " << teste->esq->chave << " " << teste->dir->chave;
-
-    remover(raiz, 10);
-    std::cout << "removi 10:" << std::endl;
-    em_nivel(raiz);
-
-    remover(raiz, 15);
-    std::cout << "removi 15:" << std::endl;
-    em_nivel(raiz);
-
-    remover(raiz, 60);
-    std::cout << "removi 60:" << std::endl;
-    em_nivel(raiz);
 
 }
