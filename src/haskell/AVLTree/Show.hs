@@ -3,6 +3,7 @@ module AVLTree.Show where
 import AVLTree.Core
 import Data.List
 
+-- @evgenii-malov
 data ParentDir = PLeft | PRight | NoParent deriving (Show, Eq)
 type ParentPos = Int
 type Level = Int
