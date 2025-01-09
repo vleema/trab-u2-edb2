@@ -6,12 +6,12 @@
 Conforme mostrado anteriormente, são muitas as vantagens do uso de uma árvore binária, entretanto, imagine um seguinte cenário: Após definida uma raiz de valor x, são adicionados valores maiores que x e maiores entre si. A situação poderia ser representada da seguinte maneira:
 
 \begin{tikzpicture}
-    \node {x}
-        child {node {x + 1}
-            child {node {x + 2}
-                child {node {x + 3}
-                    child {node {x + 4}
-                        child {node {...}}}}}};
+	\node {x}
+	child {node {x + 1}
+			child {node {x + 2}
+					child {node {x + 3}
+							child {node {x + 4}
+									child {node {...}}}}}};
 \end{tikzpicture}
 
 Perceba que esse caso é o pior cenário, e que ele nada difere de uma lista ligada. Tendo como complexidade de busca e inserção O(n), perdendo assim, todas as vantagens em relação a estruturas mais simples.
@@ -24,6 +24,6 @@ TODO: desfecho
 
 \input{chapters/02_sections/01_avl}
 \newpage
-%
-% \input{chapters/02_sections/02_rubro_negra}
-% \newpage
+
+\input{chapters/02_sections/02_rubro_negra}
+\newpage
