@@ -1,0 +1,102 @@
+Performance test for sort algorithms
+====================================
+
+ITE - stands for iterative
+REC - stands for recursive
+
+Generating list with 10000 entries ... (70.091µs)
+
+ITE BUBBLE SORT:
+  >>> Cloning ... finished in 17.934µs
+  >>> Running ... finished in 30.09409ms
+
+REC BUBBLE SORT:
+  >>> Cloning ... finished in 921ns
+  >>> Running ... finished in 41.421701ms
+
+REC QUICK SORT:
+  >>> Cloning ... finished in 742ns
+  >>> Running ... finished in 376.014µs
+
+ITE QUICK SORT:
+  >>> Cloning ... finished in 651ns
+  >>> Running ... finished in 388.286µs
+
+REC MERGE SORT:
+  >>> Cloning ... finished in 671ns
+  >>> Running ... finished in 760.342µs
+
+ITE MERGE SORT:
+  >>> Cloning ... finished in 852ns
+  >>> Running ... finished in 467.715µs
+
+HEAP SORT:
+  >>> Cloning ... finished in 671ns
+  >>> Running ... finished in 595.914µs
+
+--------------------------------------------------
+
+Generating list with 100000 entries ... (625.31µs)
+
+ITE BUBBLE SORT:
+  >>> Cloning ... finished in 143.498µs
+  >>> Running ... finished in 8.141286072s
+
+REC BUBBLE SORT:
+  >>> Cloning ... finished in 156.833µs
+  >>> Running ... finished in 9.076120126s
+
+REC QUICK SORT:
+  >>> Cloning ... finished in 34.795µs
+  >>> Running ... finished in 4.472229ms
+
+ITE QUICK SORT:
+  >>> Cloning ... finished in 13.485µs
+  >>> Running ... finished in 4.762031ms
+
+REC MERGE SORT:
+  >>> Cloning ... finished in 8.716µs
+  >>> Running ... finished in 8.49751ms
+
+ITE MERGE SORT:
+  >>> Cloning ... finished in 89.858µs
+  >>> Running ... finished in 5.939955ms
+
+HEAP SORT:
+  >>> Cloning ... finished in 89.687µs
+  >>> Running ... finished in 7.452145ms
+
+--------------------------------------------------
+
+Generating list with 1000000 entries ... (5.591513ms)
+
+ITE BUBBLE SORT:
+  >>> Cloning ... finished in 1.009268ms
+  >>> Running ... finished in 918.838945524s
+
+REC BUBBLE SORT:
+  >>> Cloning ... finished in 867.281µs
+  >>> Running ... finished in 957.590337298s
+
+REC QUICK SORT:
+  >>> Cloning ... finished in 653.07µs
+  >>> Running ... finished in 48.459402ms
+
+ITE QUICK SORT:
+  >>> Cloning ... finished in 179.085µs
+  >>> Running ... finished in 50.682197ms
+
+REC MERGE SORT:
+  >>> Cloning ... finished in 128.701µs
+  >>> Running ... finished in 93.844578ms
+
+ITE MERGE SORT:
+  >>> Cloning ... finished in 218.157µs
+  >>> Running ... finished in 67.584511ms
+
+HEAP SORT:
+  >>> Cloning ... finished in 171.13µs
+  >>> Running ... finished in 98.36624ms
+
+--------------------------------------------------
+

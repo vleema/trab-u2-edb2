@@ -1,7 +1,7 @@
 use rand::Rng;
 use sort_algorithms::{algorithms::*, heap::heap_sort};
 use std::{
-  fs::{self, File, OpenOptions},
+  fs::{self, File},
   io::{self, Write},
   time::Instant,
 };
