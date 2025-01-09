@@ -23,6 +23,9 @@ search value (Node _ left key right)
   | value > key = (R :) <$> search value right
 search _ _ = error "search: impossible"
 
+fromList :: (Ord a) => RedBlackTree a -> [a] -> RedBlackTree a
+fromList = foldr insert
+
 -- Chris Okasaki insertion method
 insert :: (Ord a) => a -> RedBlackTree a -> RedBlackTree a
 insert value tree = makeRootBlack $ insert' value tree

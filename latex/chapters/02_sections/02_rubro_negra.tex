@@ -16,7 +16,7 @@ Para atender a necessidade de se auto balancear, a Rubro-Negra assume algumas re
 \begin{figure}[!ht]
 	\centering
 	\adjustbox{max width=\textwidth}{\includegraphics{figures/rubro-negra/example.png}}
-	\caption{Exemplo de Árvore Rubro Negra}
+	\caption{Exemplo de Árvore Rubro-Negra}
 	\label{fig:rubro_example}
 \end{figure}
 \FloatBarrier
@@ -25,11 +25,11 @@ Para atender a necessidade de se auto balancear, a Rubro-Negra assume algumas re
 
 Devida sua natureza, uma árvore rubro negra de $n$ elementos tem \textit{profundidade} de ao máximo $2\lfloor\log (n + 1)\rfloor$, garantindo que as operações de \textrm{I\textsc{nserção}}, \textrm{B\textsc{usca}}, \textrm{R\textsc{emoção}} tenham complexidade $O(\log n)$ no pior caso.
 
-\subsection{Implementação}
+\subsection{Datatype}
 
 Para sua implementação, usaremos a linguagem de programação Haskell, assumindo a seguinte estrutura.
 
-\begin{lstlisting}[language=haskell]
+\begin{lstlisting}[language=haskell, caption={Árvore Rubro-Negra}]
 data RedBlackTree a
   = Node
       { color :: Color
@@ -40,35 +40,35 @@ data RedBlackTree a
   | Nil
 \end{lstlisting}
 
-Um elemento do tipo \texttt{RedBlackTree a}, onde \texttt{a} é genérico pode ser a função \texttt{Node} que recebendo quatro argumentos, a cor (\texttt{color}), a árvore esquerda (\texttt{left}), o valor dentro do nó (\texttt{key}) e a árvore direita (\texttt{right}) se torna uma \texttt{RedBlackTree a}, ou pode ser diretamente o valor \texttt{Nil}, que implicitamente tem cor preta.
+Um elemento do tipo \texttt{RedBlackTree a}, onde '\texttt{a}' é genérico, tem dois construtores: a função \texttt{Node} aplicada em quatro argumentos, a cor (\texttt{color}), a árvore esquerda (\texttt{left}), o valor dentro do nó (\texttt{key}) e a árvore direita (\texttt{right}), ou  diretamente o construtor \texttt{Nil}, que implicitamente tem cor preta.
 
 Neste documento implementaremos a \textrm{I\textsc{nserção}} e \textrm{R\textsc{emoção}}, visto que as implementações da \textrm{B\textsc{usca}} e \textrm{R\textsc{otação}} são análogas a árvore AVL e binária.
 
-\subsubsection{Inserção}
+\subsection{Implementação da inserção}
 
-Inicialmente, o algoritmo será similar a inserção na Árvore binária convencional, mas uma vez inserido o valor em algum nó, precisamos decidir qual será sua cor e garantir que as regras da Rubro-negra seja atendida.
+Inicialmente, o algoritmo será similar a inserção na Árvore binária convencional, mas uma vez inserido o valor em algum nó, precisamos decidir qual será sua cor e garantir que as regras da Rubro-negra sejam atendidas.
 
-Em relação a cor, escolheremos a cor vermelha, pois minimiza a quantidade de violações das características, caso seja a raiz, simplesmente pintaremos esse nó de preto. Teremos então:
+Em relação a cor, insertamos o nó como a cor vermelha, pois minimiza a quantidade de violações, para mitigar a violação de um nó raiz vermelho, simplesmente pintaremos esse nó de preto. Teremos, então:
 
-\begin{lstlisting}[language=haskell]
+\begin{lstlisting}[language=haskell, caption={Função principal}]
 insert :: (Ord a) => a -> RedBlackTree a -> RedBlackTree a
 insert value tree = makeRootBlack $ insert' value tree
 \end{lstlisting}
 \FloatBarrier
 
-Naturalmente, os valores que uma Rubro-negra precisa armazenar devem ser ordenáveis (restrição imposta por \texttt{Ord a}), ademais, no primeiro momento, usaremos duas funções auxiliares, a \texttt{makeRootBlack} e \texttt{insert'}.
+Naturalmente, os valores que uma Rubro-negra precisa armazenar devem ser ordenáveis (restrição imposta por \texttt{Ord a}), ademais, no primeiro momento, usaremos duas funções auxiliares, a \texttt{makeRootBlack} e \texttt{insert'}. A \texttt{makeRootBlack} será responsável por corrigir a violação anteriormente citada e a \texttt{insert'}, que realizará a inserção de fato, em conjunto com as outras correções.
 
-Começando pela mais simples, a \texttt{makeRootBlack} será simplesmente:
+Começando pela mais simples:
 
-\begin{lstlisting}[language=haskell]
+\begin{lstlisting}[language=haskell, caption={Função auxiliar 1}]
 makeRootBlack :: RedBlackTree a -> RedBlackTree a
 makeRootBlack (Node _ left key right) = Node Black left key right
 \end{lstlisting}
 \FloatBarrier
 
-Na \texttt{insert'} podemos prosseguir, assim como uma inserção tradicional em uma árvore binária, apenas com algumas ressalvas.
+Na \texttt{insert'} prosseguimos com uma inserção tradicional em árvore binária, apenas com algumas ressalvas.
 
-\begin{lstlisting}[language=haskell]
+\begin{lstlisting}[language=haskell,caption={Função auxiliar 2}]
 insert' value Nil = Node Red Nil value Nil  -- inicialmente como vermelho
 insert' value (Node color left key right)                      
   | value < key = balance color (insert' value left) key right  
@@ -77,7 +77,7 @@ insert' value (Node color left key right)
 \end{lstlisting}
 \FloatBarrier
 
-Usaremos mais uma função auxiliar chamada \texttt{balance}, que terá a mesma tipagem do construtor \texttt{Node} e será responsável por corrigir as possíveis violações locais causadas pela inserção do novo nó vermelho. Vamos analisar tais violações, ao tentar insertar um valor:
+Usaremos mais uma função auxiliar chamada \texttt{balance}, que terá a mesma tipagem do construtor \texttt{Node} e será responsável por corrigir as possíveis violações locais causadas pela inserção do novo nó vermelho, as quais:
 
 \begin{itemize}
 	\item \textbf{Violação Esquerda-Esquerda:} Dois vermelhos na sub-árvore esquerda. \\
@@ -115,7 +115,7 @@ Usaremos mais uma função auxiliar chamada \texttt{balance}, que terá a mesma 
 		      \end{minipage}
 	      \end{figure}
 	      \FloatBarrier
-	\item \textbf{Violação Esquerda-Direita:} Dois vermelhos, um no filho esquerdo e outro no filho-filho direito.
+	\item \textbf{Violação Esquerda-Direita:} Dois vermelhos, um no filho esquerdo e outro no filho direito do filho esquerdo.
 	      \begin{figure}[!ht]
 		      \centering
 		      \includegraphics[scale=0.5]{figures/rubro-negra/left-right.png}
@@ -130,7 +130,7 @@ Usaremos mais uma função auxiliar chamada \texttt{balance}, que terá a mesma 
 		      \caption{}
 	      \end{figure}
 	      \FloatBarrier
-	\item \textbf{Violação Direita-Esquerda} Dois vermelhos, um no filho direito e outro no filho-filho esquerdo.
+	\item \textbf{Violação Direita-Esquerda} Dois vermelhos, um no filho direito e outro no filho esquerdo do filho direito.
 	      \begin{figure}[!ht]
 		      \centering
 		      \includegraphics[scale=0.5]{figures/rubro-negra/right-left.png}
@@ -140,7 +140,7 @@ Usaremos mais uma função auxiliar chamada \texttt{balance}, que terá a mesma 
 \end{itemize}
 
 \noindent
-Uma vez estabelecidos os casos a, implementação desse algoritmo se torna bem mais simples do que em versões iterativas, visto que todos os casos produzem o mesmo resultado.
+Uma vez estabelecidos os casos a, implementação desse algoritmo se torna bem mais simples do que versões iterativas, visto que todos os casos produzem o mesmo resultado.
 
 \begin{lstlisting}[language=haskell]
 -- Esquerda-Esquerda
@@ -160,6 +160,25 @@ balance color left key right = Node color left key right
 \end{lstlisting}
 \FloatBarrier
 
-% TODO:
-% - Exemplo de teste
-% - Revisão
+
+\subsubsection{Teste da implementação:}
+
+Para assertar o funcionamento da Inserção na Árvore Rubro-negra, criaremos uma árvore do zero com o uso desse algoritmo:
+
+\begin{lstlisting}[language=haskell]
+fromList :: (Ord a) => RedBlackTree a -> [a] -> RedBlackTree a
+fromList = foldr insert
+\end{lstlisting}
+\FloatBarrier
+
+\noindent
+Usando os elementos dessa lista:
+$$
+	\texttt{[15, 18, 20, 35, 32, 38, 30, 40, 32, 45, 48, 52, 60, 50]}
+$$
+\begin{figure}[!ht]
+	\centering
+	\adjustbox{max width=\textwidth}{\includegraphics{figures/rubro-negra/insertion-test.png}}
+\end{figure}
+\FloatBarrier
+

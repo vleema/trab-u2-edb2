@@ -48,4 +48,4 @@ red :: String -> String
 red text = "\x1b[31m" ++ text ++ "\x1b[0m"
 
 black :: String -> String
-black text = "\x1b[30m" ++ text ++ "\x1b[0m"
+black text = "\x1b[90m" ++ text ++ "\x1b[0m"
