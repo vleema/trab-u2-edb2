@@ -1,7 +1,7 @@
 \section{Árvore AVL}
 \label{sec:avl}
 
-Esta se trata de uma implementação balanceada de uma BST(Árvore Binária de Busca). Sua primeira menção é datada no ano de 1962, no artigo \textbf{An algorithm for organization of information}, dos autores Georgy Maximovich \textbf{A}delson-\textbf{V}elsky e Evgenii Mikhailovich \textbf{L}andis, cujas iniciais foram eternizadas na nomeação do conceito. Sendo assim, sua intenção minimizar a complexidade da operação de busca, enquanto aumenta um pouco o custo da inserção e remoção, e isso acontece através do conceito de rotações.
+Esta se trata de uma implementação balanceada de uma BST. Sua primeira menção é datada no ano de 1962, no artigo \textbf{An algorithm for organization of information}, dos autores Georgy Maximovich \textbf{A}delson-\textbf{V}elsky e Evgenii Mikhailovich \textbf{L}andis, cujas iniciais foram eternizadas na nomeação do conceito. Sendo assim, sua intenção minimizar a complexidade da operação de busca, enquanto aumenta um pouco o custo da inserção e remoção, e isso acontece através do conceito de rotações.
 
 E sabendo do conceito de balanceamento apresentado anteriormente, o critério usado para aplicá-lo é o chamado \textbf{Fato de Balanceamento}, que pode ser formalizado da seguinte forma
 \begin{align*}
@@ -9,7 +9,7 @@ E sabendo do conceito de balanceamento apresentado anteriormente, o critério us
    \left[ \, \text{BF} = \text{height(t.left)} - \text{height(t.right)} \, \right]
 \end{align*}
 
-Sendo assim, seja \textbf{n} um nó de uma Árvore AVL, os quatro casos em que ele se faz necessário são os seguintes
+Sendo assim, seja \textbf{n} um nó de uma Árvore AVL, os quatro casos em que o \textbf{Fator de balanceamento} é usado como critério para balancear a árvore são os seguintes:
 
 \begin{itemize}
 	\item \textbf{Rotação direita} \\
@@ -372,7 +372,7 @@ Por fim, a remoção talvez se trate da complexa entre as operações. Isso pois
 		\end{align*}
 \end{itemize}
 
-Apresentados os casos mais triviais, vale ressaltar que as implementações reais também envolvem o balanceamento pós-remoção, conforme feito no código abaixo. Nele fora usadas, além das funções já apresentadas anteriormente, as funções \texttt{remove}, \texttt{remove'} e \texttt{removeMin}. Que respectivamente fazem o balanceamento pós inserção, a inserção de fato e a busca e remoção do menor da sub-árvore direita.
+Apresentados os casos mais triviais, vale ressaltar que as implementações reais também envolvem o balanceamento pós-remoção, conforme feito no código abaixo. Nele fora usadas, além das funções já apresentadas anteriormente, as funções \texttt{remove}, \texttt{remove'} e \texttt{removeMin}. Que respectivamente fazem o balanceamento pós-remoção, a remoção de fato e a busca e remoção do menor elemento da sub-árvore direita.
 
 \begin{lstlisting}[language=haskell]
 remove :: (Ord a) => a -> AVLTree a -> AVLTree a
@@ -382,18 +382,18 @@ remove v t =
 
 remove' :: (Ord a) => a -> AVLTree a -> AVLTree a
 remove' _ Nil = Nil
-remove' n t@(Node v Nil Nil) -- Leaf
+remove' n t@(Node v Nil Nil)
     | n == v = Nil
     | otherwise = trace "Element does not exist" t
-remove' n (Node v l Nil) -- Single son node
+remove' n (Node v l Nil)
     | n == v = l
     | n < v = Node v (remove' n l) Nil
     | otherwise = trace "Element does not exist" (Node v l Nil)
-remove' n (Node v Nil r) -- Single son node
+remove' n (Node v Nil r)
     | n == v = r
     | n > v = Node v Nil (remove' n r)
     | otherwise = trace "Element does not exist" (Node v Nil r)
-remove' n (Node v l r) -- Two son node
+remove' n (Node v l r)
     | n < v = Node v (remove' n l) r
     | n > v = Node v l (remove' n r)
     | n == v =
@@ -406,3 +406,5 @@ removeMin (Node v l r) =
     let (minValue, newLeft) = removeMin l
      in (minValue, Node v newLeft r)
 \end{lstlisting}
+
+Em súmula, observamos que a Árvore AVL é uma implementação que privilegia a operação de busca pois terceiriza o balanceamento para as operações de inserção e remoção. Isso implica em um maior custo computacional para executar as últimas duas, entretanto nada tão significativo, pois, no fim, ambas as três tem complexidade \textbf{O(log n)}.

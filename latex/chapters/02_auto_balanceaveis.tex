@@ -3,24 +3,34 @@
 
 % the key ``ch:into'' can be used with command \ref{ch:intor} to refere this Chapter.
 %
-Conforme mostrado anteriormente, são muitas as vantagens do uso de uma árvore binária, entretanto, imagine um seguinte cenário: Após definida uma raiz de valor x, são adicionados valores maiores que x e maiores entre si. A situação poderia ser representada da seguinte maneira:
+Conforme mostrado anteriormente, são muitas as vantagens do uso de uma árvore binária, entretanto, imagine um seguinte cenário: Após definida uma raiz de valor \textbf{n}, são adicionados valores maiores que \textbf{n} e maiores entre si. A situação poderia ser representada conforme abaixo.
+\begin{align*}
+		\begin{tikzpicture}[
+			every node/.style={circle, draw, minimum size=1.0cm, inner sep=0},
+		]
+               \node {n}
+                       child {node {x}}
+                       child {node {n + 1}
+                               child {node {x}}
+                               child {node {n + 2}
+                                       child {node {x}}
+                                       child {node {n + 3}
+                                               child {node {x}}
+                                               child {node {n + 4}
+                                                       child {node {x}}
+                                                       child {node {...}}}}}};
+       \end{tikzpicture}
+\end{align*}
+ 
+Perceba que esse caso é o pior cenário, e que ele nada difere de uma lista ligada. Tendo como complexidade de busca e inserção \textbf{O(n)}, perdendo assim, todas as vantagens em relação a estruturas mais simples.
+ 
+ Também vale ressaltar que apesar de se tratar do pior caso, não é tão remoto quanto parece, basta que um galho da árvore tenha um pouco mais elementos do que o seu irmão de nó que é possível observar semelhança com a situação descrita anteriormente. Dada essa situação, árvores com elementos mal distribuídos entre os galhos são ditas \textbf{desbalanceadas}, podendo formalizar a definição da seguinte maneira:
+\begin{align*}
+       (\forall t \in \text{BinTree } \alpha) \quad 
+       \left[ \, \text{ | height(t.left)} - \text{height(t.right) |} \leq 1 \implies \text{t é balanceada} \right]
+\end{align*}
 
-\begin{tikzpicture}
-	\node {x}
-	child {node {x + 1}
-			child {node {x + 2}
-					child {node {x + 3}
-							child {node {x + 4}
-									child {node {...}}}}}};
-\end{tikzpicture}
-
-Perceba que esse caso é o pior cenário, e que ele nada difere de uma lista ligada. Tendo como complexidade de busca e inserção O(n), perdendo assim, todas as vantagens em relação a estruturas mais simples.
-
-Também vale ressaltar que apesar de se tratar do pior caso, não é tão remoto quanto parece, basta que um galho da árvore tenha mais elementos do que seu irmão de nó que é possível observar semelhança com a situação descrita anteriormente. Dada essa situação, árvores com elementos mal distribuídos entre os galhos são ditas \textbf{desbalanceadas}, podendo formalizar a definição da seguinte maneira:
-
-TODO: para toda bintree, | h(bintree.esq) - h(bintree.di) | > 1 => desbalanceada)
-
-TODO: desfecho
+Por tanto, uma vez apresentado o conceito que fundamenta as \textbf{BST}'s(Árvores Binárias de Busca), a seguir veremos sua implementação através da Árvore AVL e a Árvore Rubro-Negra.
 
 \input{chapters/02_sections/01_avl}
 \newpage
