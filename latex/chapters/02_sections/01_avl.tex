@@ -199,7 +199,7 @@ Também note que ela utiliza o \texttt{Maybe a}, que é um tipo genérico que te
 Por fim, também é usado o conceito de \texttt{Typeclass} através do \texttt{Ord a}, sendo esse um conceito dentro da Haskell para tipos que atendem a determinadas especificações. Em especial a \texttt{Ord a} se trata de uma "família" de tipos cujos valores são ordenáveis, o que torna possível a operação >, que orienta as direções da busca. Em síntese, já que a Árvore AVL é extremamente dependente de comparações ordenáveis, não faz sentido que \texttt{a} seja um tipo como Bool, por exemplo.
 \subsection{Inserção}
 
-Se tratando a Árvore AVL, a inserção está longe de ser uma das suas operações mais eficientes, e isso acontece pois ela é responsável por balancear a árvore pós-inserção. Ou seja, podemos dividir a inserção em duas partes: Inserir de forma bruta e balancear a árvore, uma vez feita a inserção. Sendo assim, o primeiro passo é muito bem retratado pela função \texttt{insert'} abaixo.
+Se tratando a Árvore AVL, a inserção está longe de ser uma das suas operações mais eficientes, e isso acontece pois ela é responsável por balancear a árvore pós-inserção. Ou seja, podemos dividir a inserção em duas partes: Inserir de forma bruta e balancear a árvore uma vez feita a inserção. Sendo assim, o primeiro passo é muito bem retratado pela função \texttt{insert'} abaixo.
 
 \begin{lstlisting}[language=haskell]
 insert' :: (Ord a) => a -> AVLTree a -> AVLTree a
@@ -268,4 +268,141 @@ rotateLR (Node e (Node el ll (Node elr lrl lrr)) r) = Node elr (Node el ll lrl) 
 rotateRL :: (Ord a) => AVLTree a -> AVLTree a
 rotateRL (Node e l (Node er (Node erl rll rlr) rr)) = Node erl (Node e l rll) (Node er rlr rr)
 \end{lstlisting}
+
 \subsection{Remoção}
+
+Por fim, a remoção talvez se trate da complexa entre as operações. Isso pois seu balanceamento envolve mais elementos do que meramente rotacionar a árvore. Entretanto, podemos separá-la nos três seguintes casos
+
+\begin{itemize}
+	\item \textbf{Remoção de um nó sem filhos} \\
+		Esse caso é trivial, basta substituir um \texttt{Node} que contenha o valor a ser removido por um \texttt{Nil}. Suponha que o \textbf{C} é o elemento a ser removido.
+
+		\begin{align*}
+			\begin{tikzpicture}[
+				every node/.style={circle, draw, minimum size=0.5cm, inner sep=0},
+				level 1/.style={sibling distance=3cm},
+				level 2/.style={sibling distance=1.5cm},
+			]
+			\node (tree1) at (0,0) {A}
+				child {node {X}
+				}
+				child {node {B}
+					child {node {X}
+					}
+					child {node {C}
+						child {node {X}}
+						child {node {X}}
+					}
+				};
+				\node[style={}] (arrow) at (4.5,-2.2) {\Huge$\Rightarrow$};
+			\node (tree2) at (8,-1) {A}
+				child {node {X}
+				}
+				child {node {B}
+					child {node {X}
+					}
+					child {node {X}
+					}
+				};
+			\end{tikzpicture}
+		\end{align*}
+	\item \textbf{Remoção de um nó com um filho} \\
+		Nesse caso, independente se o nó tem uma sub-árvore esquerda ou direita, é feita uma ligação direta entre seu filho e seu avô. Suponha que \textbf{B} é o elemento a ser removido.
+		\begin{align*}
+			\begin{tikzpicture}[
+				every node/.style={circle, draw, minimum size=0.5cm, inner sep=0},
+				level 1/.style={sibling distance=3cm},
+				level 2/.style={sibling distance=1.5cm},
+			]
+			\node (tree1) at (0,0) {A}
+				child {node {X}
+				}
+				child {node {B}
+					child {node {X}
+					}
+					child {node {C}
+						child {node {X}}
+						child {node {X}}
+					}
+				};
+				\node[style={}] (arrow) at (4.5,-2.2) {\Huge$\Rightarrow$};
+			\node (tree2) at (8,-1) {A}
+				child {node {X}
+				}
+				child {node {C}
+					child {node {X}
+					}
+					child {node {X}
+					}
+				};
+			\end{tikzpicture}
+		\end{align*}
+	\item \textbf{Remoção da um nó com dois filhos} \\
+		Nesse caso precisaremos substituir o valor do nó pelo valor de uma folha, podendo ser tanto o menor valor da sub-árvore direita ou o maior da sub-árvore esquerda, geralmente usa-se o primeiro método. Suponha que o \textbf{D} deve ser removido.
+		\begin{align*}
+			\begin{tikzpicture}[
+				every node/.style={circle, draw, minimum size=0.5cm, inner sep=0},
+				level 1/.style={sibling distance=3cm},
+				level 2/.style={sibling distance=1.5cm},
+			]
+			\node (tree1) at (0,0) {D}
+				child {node {B}
+					child {node {A}}
+					child {node {C}}
+				}
+				child {node {F}
+					child {node {E}
+					}
+					child {node {G}
+					}
+				};
+				\node[style={}] (arrow) at (4.0,-1.5) {\Huge$\Rightarrow$};
+			\node (tree2) at (8,0) {E}
+				child {node {B}
+					child {node {A}}
+					child {node {C}}
+				}
+				child {node {F}
+					child {node {X}
+					}
+					child {node {G}
+					}
+				};
+			\end{tikzpicture}
+		\end{align*}
+\end{itemize}
+
+Apresentados os casos mais triviais, vale ressaltar que as implementações reais também envolvem o balanceamento pós-remoção, conforme feito no código abaixo. Nele fora usadas, além das funções já apresentadas anteriormente, as funções \texttt{remove}, \texttt{remove'} e \texttt{removeMin}. Que respectivamente fazem o balanceamento pós inserção, a inserção de fato e a busca e remoção do menor da sub-árvore direita.
+
+\begin{lstlisting}[language=haskell]
+remove :: (Ord a) => a -> AVLTree a -> AVLTree a
+remove v t =
+    let treeAfterRemotion = remove' v t
+     in rotateAt treeAfterRemotion (findUnbalancedNode treeAfterRemotion)
+
+remove' :: (Ord a) => a -> AVLTree a -> AVLTree a
+remove' _ Nil = Nil
+remove' n t@(Node v Nil Nil) -- Leaf
+    | n == v = Nil
+    | otherwise = trace "Element does not exist" t
+remove' n (Node v l Nil) -- Single son node
+    | n == v = l
+    | n < v = Node v (remove' n l) Nil
+    | otherwise = trace "Element does not exist" (Node v l Nil)
+remove' n (Node v Nil r) -- Single son node
+    | n == v = r
+    | n > v = Node v Nil (remove' n r)
+    | otherwise = trace "Element does not exist" (Node v Nil r)
+remove' n (Node v l r) -- Two son node
+    | n < v = Node v (remove' n l) r
+    | n > v = Node v l (remove' n r)
+    | n == v =
+        let (successor, newRight) = removeMin r
+         in Node successor l newRight
+
+removeMin :: (Ord a) => AVLTree a -> (a, AVLTree a)
+removeMin (Node v Nil r) = (v, r)
+removeMin (Node v l r) =
+    let (minValue, newLeft) = removeMin l
+     in (minValue, Node v newLeft r)
+\end{lstlisting}
