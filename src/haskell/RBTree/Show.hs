@@ -1,6 +1,6 @@
-module RedBlackTree.Show where
+module RBTree.Show where
 
-import RedBlackTree.Core
+import RBTree.Core
 
 import Data.List (intercalate)
 
@@ -26,8 +26,9 @@ buildLine pd color a pp level = foldl (zipWith' m) "" ((((++ "|") . flip replica
     Red -> red
     Black -> black
 
-prettyPrint' :: (Show a) => ParentDir -> [ParentPos] -> Level -> RedBlackTree a -> [String]
+prettyPrint' :: (Show a) => ParentDir -> [ParentPos] -> Level -> RBTree a -> [String]
 prettyPrint' _ _ _ Nil = []
+prettyPrint' _ _ _ NNil = ["WTF"]
 prettyPrint' pd pp level (Node color l a r) =
   prettyPrint' PRight new_pp_r (level + 1) r
     ++ [buildLine pd color a pp level]
@@ -42,7 +43,7 @@ prettyPrint' pd pp level (Node color l a r) =
     PLeft -> pp
     NoParent -> pp
 
-prettyPrint t = putStrLn (intercalate "\n" (prettyPrint' NoParent [] 0 t))
+p t = putStrLn (intercalate "\n" (prettyPrint' NoParent [] 0 t))
 
 red :: String -> String
 red text = "\x1b[31m" ++ text ++ "\x1b[0m"
