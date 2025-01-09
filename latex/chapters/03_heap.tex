@@ -27,15 +27,45 @@ Dessa forma, estabelecemos o pseudocódigo da HeapSort como:
 		\Statex
 		\Function{HeapSort}{$A$}
         \State \textbf{construir(A)}
-		\For{$j \gets A.tamanho$ to $1$}
+        \State {$tamanho \gets A.tamanho$
+		\For{$j \gets tamanho$ to $1$}
         \State \textbf{troque} $A[1]$ por $A[i]$
-        \State A.tamanho = A.tamanho-1;
+        \State tamanho = tamanho - 1;
 		\State \textbf{descer} (H, 1);
 		\EndFor
 		\EndFunction
 	\end{algorithmic}
 \end{algorithm}
 \FloatBarrier
+
+\section*{Comparação com outros Sorts}
+
+Agora, vamos comparar o resultado dos testes feitos no HeapSort com o comportamento de outros algoritmos de ordenação vistos em nosso último trabalho. Os resultados abaixo foram obtidos utilizando o ambiente computacional mencionado no Capítulo 1.
+
+\begin{table}[h!]
+	\centering
+	\caption{Tabela de resultados dos sorts}
+	\label{tab:sorts_result}
+	\begin{tabular}{lrrrr}
+		\toprule
+		Tipo de ordenação   & n = 10000   & n = 1000000  & n = 100000000 \\
+		\midrule
+	ITE Bubble Sort & 30.09409ms & 8.141286072s & 918.838945524s \\
+    REC Bubble Sort & 41.421701ms & 9.076120126s & 957.590337298s \\
+    REC Quick Sort  & 376.014µs & 4.472229ms   & 48.459402ms \\
+    ITE Quick Sort  & 388.286µs & 4.762031ms   & 50.682197ms \\
+    REC Merge Sort  & 760.342µs & 8.49751ms    & 93.844578ms \\
+    ITE Merge Sort  & 467.715µs & 5.939955ms   & 67.584511ms \\
+		\midrule
+		Heap Sort       & 595.914µs & 7.452145ms   & 98.36624ms \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+OBS: "ITE" significa Iterativo e "REC" significa Recursivo  
+
+Vemos que, dentre os algoritmos analisados, o Heap Sort apresenta uma eficiência consistente, superando significativamente os tempos de execução dos algoritmos Bubble Sort (tanto iterativo quanto recursivo), que se mostram inadequados para listas maiores devido ao alto custo computacional. Apesar de ligeiramente superado pelos Quick Sorts (iterativo e recursivo) em todos os casos apresentados, o Heap Sort mantém resultados próximos em listas pequenas e médias. Quanto ao Merge Sort, observa-se uma proximidade significativa em eficiência com o Heap Sort: a versão recursiva apresenta desempenho semelhante, enquanto a versão iterativa consegue uma leve vantagem, especialmente em listas menores. Isso evidencia que o Heap Sort, apesar de não ser o mais rápido em todas as situações, continua sendo uma escolha confiável para ordenações eficientes.
+
 
 % \input{chapters/03_sections/01_heapify}
 % \newpage
