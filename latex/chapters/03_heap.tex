@@ -2,7 +2,41 @@
 \label{ch:heap} % This how you label a chapter and the key (e.g., ch:into) will be used to refer this chapter ``Introduction'' later in the report. 
 
 % the key ``ch:into'' can be used with command \ref{ch:intor} to refere this Chapter.
-%
+% 
+\section*{Introdução}
+A Heap (ou Binary Heap) é uma estrutura de dados que representa uma árvore binária completa ou quase-completa. Nesse tipo de árvore, todos os níveis, exceto possivelmente o último, estão preenchidos, da esquerda para a direita.
+
+Existem duas variações de Binary Heap: Max Heap e Min Heap. No Max Heap, os pais têm valores maiores que ou iguais aos dos filhos, enquanto no Min Heap, os pais têm valores menores que ou iguais aos dos filhos.
+
+Nesse projeto, a Heap foi implementada em Rust e foram utilizados testes para verificar as funções de Alteração de Prioridade, Inserção, Remoção (da raiz) e Construção das Heaps. Tais testes podem ser vistos funcionando no vídeo enviado pelo grupo.
+
+\section*{HeapSort}
+
+HeapSort é um algoritmo de ordenação que usa uma Árvore Heap para classificar os elementos. Ele opera construindo o heap, extraindo repetidamente a raiz e reconstituindo a heap.
+
+Para isso, algumas funções auxiliares são necessarias como: construir(tranforma uma lista em Heap levando em conta suas propriedades e características), subir(move um elemento para níveis superiores) e descer (move um elemento para níveis inferiores).
+
+Dessa forma, estabelecemos o pseudocódigo da HeapSort como:
+
+\begin{algorithm}
+	\caption{HeapSort}
+	\label{algo:heap_sort}
+	\begin{algorithmic}[1]
+		\Require{Lista $A = A_1, A_2, \ldots, A_n$}
+		\Ensure{Lista $A$ ordenada}
+		\Statex
+		\Function{HeapSort}{$A$}
+        \State \textbf{construir(A)}
+		\For{$j \gets A.tamanho$ to $1$}
+        \State \textbf{troque} $A[1]$ por $A[i]$
+        \State A.tamanho = A.tamanho-1;
+		\State \textbf{descer} (H, 1);
+		\EndFor
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+\FloatBarrier
+
 % \input{chapters/03_sections/01_heapify}
 % \newpage
 %
