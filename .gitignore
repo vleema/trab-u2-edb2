@@ -1,5 +1,19 @@
 ## Latex
-latex/output/*
+*.aux
+*.bbl
+*.blg
+*.brf
+*.fls
+*.fdb_latexmk
+*.log
+*.synctex.gz
+*.toc
+*.out
+*.lof
+*.lot
+*.lol
+*.nav
+*.snm
 
 ## Haskell
 dist
