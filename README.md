@@ -2,8 +2,15 @@
 
 [Assista ao vídeo](TO_DO) para entender o funcionamento do projeto.
 
-
 # Sobre o repositório
+
+## Dependências
+
+- [GHCup](https://www.haskell.org/ghcup/) - Haskell
+- [Rustup](https://www.rust-lang.org/tools/install) - Rust Toolchain Manager
+- [Cargo](https://rust-lang.github.io/rustup/installation/index.html) - Rust Package Manager
+- [GNU Make](https://www.gnu.org/software/make/) - Makefile
+- GCC ou Clang - Compilador de C/C++
 
 ## $\LaTeX$
 
@@ -34,19 +41,27 @@ Para rodar os testes de Alteração de Prioridade, Inserção, Remoção (da rai
 ```terminal
 cargo test
 ```
+
 Ele vai mostrar no terminal o resultado dos testes programados no código.
 
 Pra rodar a comparação entre os sorts basta executar dentro da pasta `src/rust`:
 
 ```terminal
-cargo run
+cargo run --release
 ```
 
 E aí ele vai criar o arquivo `src/rust/src/out/entries.txt` e `src/rust/src/out/output.txt`, com as listas que ele usou e o resultado de performance respectivamente.
 
 ### Haskell
-TO_DO
+
+Para testar/brincar com os códigos em haskell, basta ir em `src/haskell`, e abrir o `ghci` com o que você quer mexer:
+
+```terminal
+ghci RBTree
+```
+
 ### C++
+
 TO_DO
 
 # Lista de atividades dos colaboradores
