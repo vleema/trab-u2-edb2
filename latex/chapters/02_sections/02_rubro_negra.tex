@@ -45,7 +45,7 @@ Neste documento implementaremos a \textrm{I\textsc{nserção}}\footnote{Versão 
 
 Inicialmente, o algoritmo será similar a inserção na Árvore binária convencional, mas uma vez inserido o valor em algum nó, precisamos decidir qual será sua cor e garantir que as regras da Rubro-negra sejam atendidas.
 
-Em relação a cor, insertamos o nó como a cor vermelha, pois minimiza a quantidade de violações, para mitigar a violação de um nó raiz vermelho, simplesmente pintaremos esse nó de preto. Teremos, então:
+Em relação a cor, insertamos o nó como a cor vermelha, pois minimiza a quantidade de violações. Para garantir que nenhum nó vermelho seja raiz, simplesmente pintamos o último nó de preto. Teremos, então:
 
 \begin{lstlisting}[language=haskell, caption={Função principal}]
 insert :: (Ord a) => a -> RBTree a -> RBTree a
@@ -53,11 +53,11 @@ insert x tree = blacken (ins tree)
 \end{lstlisting}
 \FloatBarrier
 
-Naturalmente, os valores que uma Rubro-negra precisa armazenar devem ser ordenáveis (restrição imposta por \texttt{Ord a}), ademais, no primeiro momento, usaremos duas funções auxiliares, a \texttt{blacken} e \texttt{ins}. A \texttt{blacken} será responsável por corrigir a violação anteriormente citada e a \texttt{ins}, que realizará a inserção de fato, em conjunto com as outras correções.
+Naturalmente, os valores que uma Rubro-negra precisa armazenar devem ser ordenáveis (restrição imposta por \texttt{Ord a}), ademais, no primeiro momento, usaremos duas funções auxiliares, a \texttt{blacken} e \texttt{ins}. A \texttt{blacken} será responsável por corrigir a violação anteriormente citada e a \texttt{ins} realizará de fato a inserção, em conjunto com as outras correções.
 
 Começando pela mais simples:
 
-\begin{lstlisting}[language=haskell, caption={Função auxiliar 1}]
+\begin{lstlisting}[language=haskell]
 blacken Nil = Nil
 blacken (Node _ left r right) = Node Black left r right
 \end{lstlisting}
@@ -65,7 +65,7 @@ blacken (Node _ left r right) = Node Black left r right
 
 Na \texttt{ins} prosseguimos com uma inserção tradicional em árvore binária, apenas com algumas ressalvas.
 
-\begin{lstlisting}[language=haskell,caption={Função auxiliar 2}]
+\begin{lstlisting}[language=haskell]
 ins Nil = Node Red Nil x Nil                 
 ins tree@(Node color left r right)           
   | x < r = balance color (ins left) r right 
@@ -85,14 +85,14 @@ Usaremos mais uma função auxiliar chamada \texttt{balance}, que terá a mesma 
 		      \caption{}
 	      \end{figure}
 	      \FloatBarrier
-	      E para resolver localmente essa violação, rotacionamos e alteramos as cores da árvore da seguinte forma:
+	      E para resolver localmente essa violação, rotacionamos e alteramos as cores da árvore:
 	      \begin{figure}[!ht]
 		      \centering
 		      \includegraphics[scale=0.5]{figures/rubro-negra/left-left-base-solution.png}
 		      \caption{}
 	      \end{figure}
 	      \FloatBarrier
-	      Entretanto, depois de balancear essa sub-árvore, a raiz vermelha pode ser filho de algum outro nó vermelho na árvore maior. Mas, como a \texttt{balance} é chamada em cada etapa do \texttt{ins}, logo ela vai continuar corrigindo as violações nas sub-árvores até a topo da árvore. Então generalizamos esse caso:
+	      Entretanto, depois de balancear essa sub-árvore, a raiz vermelha pode ser filho de algum outro nó vermelho na árvore maior. Mas, como a \texttt{balance} é chamada em cada etapa do \texttt{ins}, logo, ela vai continuar corrigindo as violações nas sub-árvores até a topo da árvore. Então generalizamos esse caso:
 	      \begin{figure}[!ht]
 		      \centering
 		      \begin{minipage}{0.4\textwidth}
@@ -180,14 +180,12 @@ $$
 
 \subsection{Implementação da remoção}
 
-Assim como na inserção, a remoção na árvore rubro-negra tem diversos casos, muitos dos quais são simples de resolver e até idênticos aos da inserção. Entretanto, a remoção de um nó preto sem filho requer uma atenção especial, pois altera a altura da árvore. O truque para lidar com esse caso é adicionar duas cores extras temporárias '\texttt{BBlack}' e '\texttt{NBlack}', e quebrar-lo em três partes: Remoção, Borbulhamento e Balanceamento.
+Assim como na inserção, a remoção na Árvore Rubro-negra tem diversos casos, muitos dos quais são simples de resolver e até idênticos aos da inserção. Entretanto, a remoção de um nó preto sem filho requer uma atenção especial, pois altera a altura da árvore. O truque para lidar com esse caso é adicionar duas cores temporárias '\texttt{BBlack}' e '\texttt{NBlack}', e quebrar-lo em três partes: \textbf{Remoção}, \textbf{Borbulhamento} e \textbf{Balanceamento}.
 
-
-% TODO: Adicionar rodapé sobre o algoritmo de Matt Might
 
 \begin{enumerate}
-	\item Por adicionar a cor '\texttt{BBlack}', o caso se reduz a mudar o nó para uma folha '\texttt{BBlack}'. Um nó '\texttt{BBlack}', conta duas vezes a altura de um nó preto, o que permite que a regra seja preservada.
-	\item O borbulhamento visa eliminar os '\texttt{BBlack}' criados pela remoção. As vezes, é possível elimina-los recolorindo seu pai e irmão. Se não for possível, o '\texttt{BBlack}' é  "borbulhado" para seu pai. Para fazer, isso talvez seja necessário recolorir o irmão do nó para '\texttt{NBlack}', caso seja vermelho.
+	\item Por adicionar a cor '\texttt{BBlack}', o caso se reduz a mudar o nó para uma folha '\texttt{NNil}'. Um nó com cor '\texttt{BBlack}', conta duas vezes a altura de um nó de cor preta, o que permite que a regra seja preservada.
+	\item O borbulhamento visa eliminar os '\texttt{BBlack}'s criados pela remoção. As vezes, é possível eliminá-los recolorindo seu pai e irmão. Se não for possível, o '\texttt{BBlack}' é  "borbulhado"\ para seu pai. Para fazer isso, talvez seja necessário recolorir o irmão do nó para '\texttt{NBlack}', caso seja vermelho.
 	\item Por fim, o balanceamento elimina os '\texttt{BBlack}'s e '\texttt{NBlack}'s ao mesmo tempo. Generalizamos e usamos a mesma função \texttt{balance} da inserção com dois novos casos.
 \end{enumerate}
 
@@ -341,7 +339,7 @@ O borbulhamento move \texttt{BBlack}'s para os pais, ou elimina-os completamente
 \end{figure}
 \FloatBarrier
 
-Em todos os casos, a ação necessária para mover o \texttt{BBlack} para cima é o mesmo: Escurecer a cor dos filhos e "emvermelhar" a cor dos pais:
+Em todos os casos, a ação necessária para mover o \texttt{BBlack} para cima é o mesmo: "Emvermelhar"\ a cor dos filhos e "escurecer"\ a cor dos pais:
 
 \begin{figure}[!ht]
 	\centering
@@ -357,7 +355,7 @@ De forma que:
 \end{figure}
 \FloatBarrier
 
-O pontilhado indica a necessidade de rebalanceamento, por causa da introdução de uma relacionamento Vermelho-Vermelho, NBlack/Vermelho entre pai e filho, que viola as regras da rubro-negra.
+O pontilhado indica a necessidade de rebalanceamento, a causa é a introdução de uma relacionamento Vermelho-Vermelho ou NBlack/Vermelho entre pai e filho, cujo viola as regras da rubro-negra.
 
 Como toda ação é a mesma, o código da \texttt{bubble} também é relativamente simples:
 
@@ -379,7 +377,7 @@ redder' (Node color left x right) = Node (redder color) left x right
 
 \subsubsection{Terceira parte: Balanceamento}
 
-Aproveitando a \texttt{balance} implementada para a inserção, que consertava essas violações onde a raiz é preta:
+Aqui aproveitamos a \texttt{balance} implementada para a inserção, que consertava essas violações onde a raiz é preta:
 
 \begin{figure}[!ht]
 	\centering
@@ -387,7 +385,7 @@ Aproveitando a \texttt{balance} implementada para a inserção, que consertava e
 \end{figure}
 \FloatBarrier
 
-Ao torná-las nessa árvore:
+Tornando-as nessa árvore:
 
 \begin{figure}[!ht]
 	\centering
