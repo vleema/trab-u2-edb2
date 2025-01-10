@@ -1,14 +1,14 @@
 \section{Árvore Rubro Negra}
 \label{sec:rubro}
 
-Como uma alternativa mais relaxada à Arvore AVL, a Arvore Rubro Negra surgiu do trabalho "A Dichromatic Framework for Balanced Trees"\ de Leonidas J. e Robert Sedgewick, e a escolha das cores rubro e negra foram influenciados pela disponibilidade de canetas dessa cor na época e qualidade de impressão.
+Como uma alternativa mais relaxada à Arvore AVL, a Arvore Rubro Negra surgiu do trabalho "A Dichromatic Framework for Balanced Trees"\ de Leonidas J. e Robert Sedgewick, e a escolha das cores rubro e negra foram influenciados pela disponibilidade de canetas dessa cor na época e qualidade de impressão\footnote{\cite{wikipedia_red_black_tree}}.
 
 Para atender a necessidade de se auto balancear, a Rubro-Negra assume algumas regras e características:
 
 \begin{enumerate}
 	\item Todo nó é vermelho (rubro) ou preto (negro).
 	\item O nó raiz é preto.
-	\item Toda folha (\texttt{Nil}) é preto.
+	\item Toda folha (\texttt{Nil}) é preta.
 	\item Se um nó é vermelho, seus dois filhos são pretos.
 	\item Cada caminho da raiz até um nó \texttt{Nil} tem a mesma quantidade de nós pretos.
 \end{enumerate}
@@ -16,15 +16,14 @@ Para atender a necessidade de se auto balancear, a Rubro-Negra assume algumas re
 \begin{figure}[!ht]
 	\centering
 	\adjustbox{max width=\textwidth}{\includegraphics{figures/rubro-negra/example.png}}
-	\caption{Exemplo de Árvore Rubro Negra}
-	\caption{Exemplo de Árvore Rubro-Negra}
+	\caption{Imagem retirada de \cite{cormen2022algorithms}}
 	\label{fig:rubro_example}
 \end{figure}
 \FloatBarrier
 
 % TODO: Adicionar nota de rodapé indicando origem da imagem 
 
-Devida sua natureza, uma árvore rubro negra de $n$ elementos tem \textit{profundidade} de ao máximo $2\lfloor\log (n + 1)\rfloor$, garantindo que as operações de \textrm{I\textsc{nserção}}, \textrm{B\textsc{usca}}, \textrm{R\textsc{emoção}} tenham complexidade $O(\log n)$ no pior caso.
+Devida sua natureza, uma árvore rubro negra de $n$ elementos tem \textit{profundidade}\footnote{A distância entre um nó qualquer e a raiz} de ao máximo $2\lfloor\log (n + 1)\rfloor$, garantindo que as operações de \textrm{I\textsc{nserção}}, \textrm{B\textsc{usca}}, \textrm{R\textsc{emoção}} tenham complexidade $O(\log n)$ no pior caso.
 
 \subsection{Datatype}
 
@@ -39,11 +38,10 @@ data RBTree a
 
 Um elemento do tipo \texttt{RedBlackTree a}, onde '\texttt{a}' é genérico, tem dois construtores: construtor \texttt{Nil}, que implicitamente tem cor preta, ou a função \texttt{Node} aplicada em quatro argumentos, a cor (\texttt{Color}), a árvore esquerda (\texttt{RBTree a}), o valor dentro do nó (\texttt{a}) e a árvore direita (\texttt{RBTree a}),
 
-Neste documento implementaremos a \textrm{I\textsc{nserção}} e \textrm{R\textsc{emoção}}, visto que as implementações da \textrm{B\textsc{usca}} e \textrm{R\textsc{otação}} são análogas a árvore AVL e binária.
+Neste documento implementaremos a \textrm{I\textsc{nserção}}\footnote{Versão de \cite{okasaki1999functional}} e \textrm{R\textsc{emoção}}\footnote{Versão de \cite{germane2014deletion}}, visto que as implementações da \textrm{B\textsc{usca}} e \textrm{R\textsc{otação}} são análogas a árvore AVL e binária.
 
 \subsection{Implementação da inserção}
 
-% TODO: Adicionar rodapé sobre o algoritmo de Chris Okasaki
 
 Inicialmente, o algoritmo será similar a inserção na Árvore binária convencional, mas uma vez inserido o valor em algum nó, precisamos decidir qual será sua cor e garantir que as regras da Rubro-negra sejam atendidas.
 
@@ -183,6 +181,7 @@ $$
 \subsection{Implementação da remoção}
 
 Assim como na inserção, a remoção na árvore rubro-negra tem diversos casos, muitos dos quais são simples de resolver e até idênticos aos da inserção. Entretanto, a remoção de um nó preto sem filho requer uma atenção especial, pois altera a altura da árvore. O truque para lidar com esse caso é adicionar duas cores extras temporárias '\texttt{BBlack}' e '\texttt{NBlack}', e quebrar-lo em três partes: Remoção, Borbulhamento e Balanceamento.
+
 
 % TODO: Adicionar rodapé sobre o algoritmo de Matt Might
 
