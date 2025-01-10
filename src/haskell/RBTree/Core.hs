@@ -85,7 +85,7 @@ balance Black (Node Red (Node Red at x bt) y ct) z dt = Node Red (Node Black at 
 balance Black (Node Red at x (Node Red bt y ct)) z dt = Node Red (Node Black at x bt) y (Node Black ct z dt)
 balance Black at x (Node Red (Node Red bt y ct) z dt) = Node Red (Node Black at x bt) y (Node Black ct z dt)
 balance Black at x (Node Red bt y (Node Red ct z dt)) = Node Red (Node Black at x bt) y (Node Black ct z dt)
--- Six cases for deletion:
+-- Red-Red violations with double black root
 balance BBlack (Node Red (Node Red at x bt) y ct) z dt = Node Black (Node Black at x bt) y (Node Black ct z dt)
 balance BBlack (Node Red at x (Node Red bt y ct)) z dt = Node Black (Node Black at x bt) y (Node Black ct z dt)
 balance BBlack at x (Node Red (Node Red bt y ct) z dt) = Node Black (Node Black at x bt) y (Node Black ct z dt)
@@ -111,7 +111,7 @@ redden (Node _ left key right) = Node Red left key right
 blacken :: RBTree a -> RBTree a
 blacken Nil = Nil
 blacken NNil = Nil
-blacken (Node _ left key right) = Node Black left key right
+blacken (Node _ left r right) = Node Black left r right
 
 isBBlack :: RBTree a -> Bool
 isBBlack NNil = True
