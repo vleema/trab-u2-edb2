@@ -31,7 +31,7 @@ no* inserir(no* origem, int chaveNovoNo){
 }
 
 void pre_ordem(no* pt){
-    std::cout << pt->chave << std::endl;
+    std::cout << pt->chave << " ";
     if(pt->esq != NULL){
         pre_ordem(pt->esq);
     }
@@ -44,7 +44,7 @@ void ordem_simetrica(no* pt){
     if(pt->esq != NULL){
         ordem_simetrica(pt->esq);
     }
-    std::cout << pt->chave << std::endl;
+    std::cout << pt->chave << " ";
     if(pt->dir != NULL){
         ordem_simetrica(pt->dir);
     }
@@ -57,7 +57,7 @@ void pos_ordem(no* pt){
     if(pt->dir != NULL){
         pos_ordem(pt->dir);
     }
-    std::cout << pt->chave << std::endl;
+    std::cout << pt->chave << " ";
 }
 
 void auxiliar_em_nivel(no* no, int nivel, std::vector<std::vector<int>>& resultados){
@@ -157,30 +157,46 @@ no* remover(no* root, int chave) {
 
 int main(){
     no* raiz = nullptr;
-    // raiz = inserir(raiz, 20);
-    // raiz = inserir(raiz, 10);
-    // raiz = inserir(raiz, 40);
-    // raiz = inserir(raiz, 15);
-    // raiz = inserir(raiz, 30);
-    // raiz = inserir(raiz, 50);
-    // raiz = inserir(raiz, 60);
-    raiz = inserir(raiz, 30);
-    raiz = inserir(raiz, 25);
-    raiz = inserir(raiz, 39);
-    raiz = inserir(raiz, 20);
-    raiz = inserir(raiz, 27);
+
+    // Teste de inserção e busca
+    std::cout << "Teste de inserção:" << std::endl;
+    std::cout << "Inserindo 50, 35, 70, 25, 50, 65, 90, 30 e 80"<< std::endl;
+    raiz = inserir(raiz, 50);
     raiz = inserir(raiz, 35);
-    raiz = inserir(raiz, 42);
-    raiz = inserir(raiz, 23);
-    raiz = inserir(raiz, 40);
+    raiz = inserir(raiz, 70);
+    raiz = inserir(raiz, 25);
+    raiz = inserir(raiz, 50);
+    raiz = inserir(raiz, 65);
+    raiz = inserir(raiz, 90);
+    raiz = inserir(raiz, 30);
+    raiz = inserir(raiz, 80);
 
-    //em_nivel(raiz);
+    std::cout << "\nTravessia em nivel:"<< std::endl;
+    em_nivel(raiz);
 
-    //pos_ordem(raiz);
+    std::cout << "\nTeste de busca:\n";
+    std::cout << (busca(raiz, 35) != nullptr ? "Encontrado 50\n" : "Nao encontrado 50\n")<< std::endl;
+    std::cout << (busca(raiz, 90) != nullptr ? "Encontrado 35\n" : "Nao encontrado 35\n")<< std::endl;
 
-    //pre_ordem(raiz);
+    std::cout << "Teste de remoção:\n";
+    raiz = remover(raiz, 40);
+    std::cout << (busca(raiz, 40) == nullptr ? "Removido 40\n" : "Falha ao remover 40\n")<< std::endl;
+    raiz = remover(raiz, 35);
+    std::cout << (busca(raiz, 35) == nullptr ? "Removido 35\n" : "Falha ao remover 35\n")<< std::endl;
+    raiz = remover(raiz, 50);
+    std::cout << (busca(raiz, 50) == nullptr ? "Removido 50\n" : "Falha ao remover 50\n")<< std::endl;
 
+    // Teste de travessia
+    std::cout << "Travessia em ordem simetrica:\n";
     ordem_simetrica(raiz);
+    std::cout << "\n\nTravessia em pre-ordem:\n";
+    pre_ordem(raiz);
+    std::cout << "\n\nTravessia em pos-ordem:\n";
+    pos_ordem(raiz);
+    std::cout << "\n\nTravessia em nivel:\n";
+    em_nivel(raiz);
+
+    return 0;
 
 
 }
