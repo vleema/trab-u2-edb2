@@ -63,7 +63,11 @@ ghci RBTree
 
 ### C++
 
-TO_DO
+```terminal
+g++ main.cpp -o main
+./main
+
+```
 
 # Lista de atividades dos colaboradores
 
